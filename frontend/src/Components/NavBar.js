@@ -22,8 +22,8 @@ const NavBar = () => {
                     View
                 </Button>
                 <Menu id="view-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
-                    <MenuItem component={RouterLink} to="/schools">School</MenuItem>
-                    <MenuItem component={RouterLink} to="/calendar">Calendar</MenuItem>
+                    <MenuItem onClick={handleClose} component={RouterLink} to="/schools">School</MenuItem>
+                    <MenuItem onClick={handleClose} component={RouterLink} to="/calendar">Calendar</MenuItem>
                 </Menu>
                 <IconButton aria-label="add school" color="primary" component={RouterLink} to="/addSchool">
                     <AddCircleIcon />
