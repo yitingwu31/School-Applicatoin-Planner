@@ -1,23 +1,30 @@
 import logo from './logo.svg';
 import './App.css';
+import { NavBar, AddSchool } from './Components'
+import { Schools, Calendar } from './Containers'
+import React from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <NavBar />
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/schools"/>
+          </Route>
+          <Route exact path="/schools">
+            <Schools />
+          </Route>
+          <Route exact path="/calendar">
+            <Calendar />
+          </Route>
+          <Route exact path="/addSchool">
+            <AddSchool />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
