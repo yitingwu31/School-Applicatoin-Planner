@@ -1,6 +1,7 @@
 ## Usage
 - git clone repo
-- cd frontend && yarn add @material-ui/core @material-ui/icons
+- type `yarn`
+- `cd frontend` && `yarn`
 
 ### 6/20
 - Frontend design
