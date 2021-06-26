@@ -1,7 +1,9 @@
 ## Usage
 - git clone repo
 - type `yarn`
-- `cd frontend` && `yarn`
+- `yarn start` to start frontend app on localhost:3000
+
+## Progress
 
 ### 6/20
 - Frontend design
@@ -11,3 +13,8 @@
 
 ### 6/20 Emily
 - Simple navigation bar routing to three main pages
+
+### 6/26 Emily
+- Basic calendar view
+- Use project from ![react-calendar](#https://github.com/zackify/react-calendar) :pray:
+- TBD: custom css
