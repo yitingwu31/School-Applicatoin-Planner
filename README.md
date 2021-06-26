@@ -16,5 +16,5 @@
 
 ### 6/26 Emily
 - Basic calendar view
-- Use project from ![react-calendar](#https://github.com/zackify/react-calendar) :pray:
+- Use project from [react-calendar](https://github.com/zackify/react-calendar) :pray:
 - TBD: custom css
