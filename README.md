@@ -14,6 +14,10 @@
 ### 6/20 Emily
 - Simple navigation bar routing to three main pages
 
+### 6/25 慈
+- Add school interface
+- TBD: Add complete time and checkpoints
+
 ### 6/26 Emily
 - Basic calendar view
 - Use project from [react-calendar](https://github.com/zackify/react-calendar) :pray:
