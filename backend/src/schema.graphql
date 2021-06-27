@@ -1,4 +1,17 @@
+type Mutation {
+    createUser(name: String!): User!
+    createSchool(data: CreateSchoolInput!): School!
+}
 
+type Query {
+    user(name: String!): User!
+}
+
+input CreateSchoolInput {
+    owner: String!
+    name: String!
+    deadline: String!
+}
 
 type Checkpoint {
     id: ID!

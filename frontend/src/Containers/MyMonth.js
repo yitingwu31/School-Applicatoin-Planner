@@ -8,7 +8,7 @@ import {
   DefaultMonthlyEventItem,
 } from '@zach.codes/react-calendar';
 
-import { setTime } from '../utils';
+import { setCalendarTime } from '../utils';
 
 const MyMonth = () => {
 

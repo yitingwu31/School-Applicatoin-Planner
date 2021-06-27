@@ -7,3 +7,7 @@ export const convertTimeString = ({ year, month, date, hour, minute }) => {
     
     return `${yyyy}-${mm}-${dd}-${hh}-${min}`;
 }
+
+export const makeSchoolKey = (user, school) => {
+    return `${user}-${school}`;
+}
