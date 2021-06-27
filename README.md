@@ -26,3 +26,7 @@
 ### 6/27 Janiece
 - school page view first draft
 - code reference to 'https://material-ui.com/'
+
+### 6/27 Emily
+- setup backend graphql and mongoose
+- mutation: createUser, createSchool, createTodo
