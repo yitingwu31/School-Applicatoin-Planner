@@ -15,6 +15,7 @@ const schoolSchema = new Schema({
 });
 
 const todoSchema = new Schema({
+    key: { type: String, required: true },
     task: { type: String, required: true },     // SOP
     deadline: { type: String, required: true },
     comment: { type: String, required: false },
@@ -22,6 +23,7 @@ const todoSchema = new Schema({
 })
 
 const checkpointSchema = new Schema({
+    key: { type: String, required: true },
     content: { type: String, required: true },
     time: { type: String, required: true },
 })

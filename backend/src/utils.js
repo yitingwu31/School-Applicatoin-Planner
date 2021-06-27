@@ -11,3 +11,7 @@ export const convertTimeString = ({ year, month, date, hour, minute }) => {
 export const makeSchoolKey = (user, school) => {
     return `${user}-${school}`;
 }
+
+export const makeCheckpointKey = (owner, school, task) => {
+    return `${owner}-${school}-${task}`;
+}

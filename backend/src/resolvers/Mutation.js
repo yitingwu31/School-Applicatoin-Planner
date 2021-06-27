@@ -1,4 +1,4 @@
-import { convertTimeString, makeSchoolKey } from "../utils";
+import { makeSchoolKey } from "../utils";
 
 const checkUser = async (db, name) => {
     let user = await db.UserModel.findOne({ name });
@@ -32,11 +32,31 @@ const Mutation = {
         await user.save();
 
         return newschool;
-    }
+    },
 
     // updateSchool(parent, { data }, { db }, info) {
 
-    // }
+    // },
+
+    async createTodo(parent, { owner, school, data }, { db }, info) {
+        const key = makeSchoolKey(owner, school);
+        let schoolcard = await db.SchoolModel.findOne({ key });
+        if (!schoolcard) {
+            throw new Error("School has not been created!");
+        }
+        let newtodolist = [];
+        await Promise.all(
+            data.map(async (todo) => {
+                const { task, deadline, comment } = todo;
+                let newtodo = await new db.TodoModel({ key, task, deadline, comment }).save();
+                newtodolist.push(newtodo);
+            })
+        ).catch ((e) => console.log(e));
+        console.log(newtodolist);
+        schoolcard.todos.push(...newtodolist);
+        await schoolcard.save();
+        return newtodolist;
+    }
 }
 
 export { Mutation as default };

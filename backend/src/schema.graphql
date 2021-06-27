@@ -1,6 +1,7 @@
 type Mutation {
     createUser(name: String!): User!
     createSchool(data: CreateSchoolInput!): School!
+    createTodo(owner: String!, school: String!, data: [CreateTodoInput]): [Todo]!
 }
 
 type Query {
@@ -13,14 +14,22 @@ input CreateSchoolInput {
     deadline: String!
 }
 
+input CreateTodoInput {
+    task: String!
+    deadline: String!
+    comment: String
+}
+
 type Checkpoint {
     id: ID!
+    key: String!
     content: String!
     time: String!
 }
 
 type Todo {
     id: ID!
+    key: String!
     task: String!
     deadline: String!
     comment: String
