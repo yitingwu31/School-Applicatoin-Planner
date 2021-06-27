@@ -22,3 +22,7 @@
 - Basic calendar view
 - Use project from [react-calendar](https://github.com/zackify/react-calendar) :pray:
 - TBD: custom css
+
+### 6/27 Janiece
+- school page view first draft
+- code reference to 'https://material-ui.com/'
