@@ -1,0 +1,29 @@
+
+
+type Checkpoint {
+    id: ID!
+    content: String!
+    time: String!
+}
+
+type Todo {
+    id: ID!
+    task: String!
+    deadline: String!
+    comment: String
+    checkpoints: [Checkpoint!]
+}
+
+type School {
+    id: ID!
+    key: String!
+    name: String!
+    deadline: String!
+    todos: [Todo!]
+}
+
+type User {
+    id: ID!
+    name: String!
+    schools: [School!]
+}
