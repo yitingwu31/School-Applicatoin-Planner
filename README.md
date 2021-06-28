@@ -27,6 +27,10 @@
 - school page view first draft
 - code reference to 'https://material-ui.com/'
 
+### 6/27 慈
+- Complete time
+- Use [keyboard date pickers](https://material-ui-pickers.dev/demo/datepicker#keyboard-input) in [material-ui/pickers](https://material-ui.com/components/pickers/#native-pickers)
+- type `yarn add @material-ui/pickers` and `yarn add @date-io/date-fns@1.x date-fns`
 ### 6/27 Emily
 - setup backend graphql and mongoose
 - mutation: createUser, createSchool, createTodo
