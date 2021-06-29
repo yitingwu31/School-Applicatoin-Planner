@@ -117,21 +117,13 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
         return SCHOOL
     }
 
-    School = initSchool(School_todos, Todo, School)
+    const _School = initSchool(School_todos, Todo, School)
 
     const [checked, setChecked] = useState([]);
     const [school_todos, setSchoolTodos] = useState(School_todos)
-    const [school, setSchool] = useState(School)
+    const [school, setSchool] = useState(_School)
     const addTodoRef = useRef();
     const schoolNameRef = useRef();
-
-    useEffect(() => {
-        //const clicked = () => console.log()
-        window.addEventListener('click', handledefaultDeadline)
-        return () => {
-            window.removeEventListener('click', handledefaultDeadline)
-        }
-    }, [school, checked, school_todos])
 
     const handleAddSchoolName = () => {
         const SCHOOL = { ...school }
@@ -144,7 +136,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
         //find and replace
         const index = findTodoIndex(todo)
         SCHOOL.todos[index] = todo
-        console.log(SCHOOL)
+        //console.log("handleSetTodo: ", index, SCHOOL)
         setSchool(SCHOOL)
     }
 
@@ -172,7 +164,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
         return ans
     }
     const findCheckpointIndex = (todo, content) => {
-        console.log("in find checkpointindex")
+        //console.log("in find checkpointindex")
         const TODOindex = findTodoIndex(todo)
         const TODO = school.todos[TODOindex]
         //console.log(TODO)
@@ -204,51 +196,37 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
     }
     const handleAddCheckpoint = (todo, Checkpoint) => (event) => {
         if (event.keyCode === 13) {
-            console.log("in add checkpoint")
+            //console.log("in add checkpoint")
             //https://stackoverflow.com/a/63724115
             const td = { ...todo }
             const index = findTodoIndex(td)
             const cpindex = findCheckpointIndex(td, event.target.value)
-            const existing = (cpindex) => {
-                if (cpindex === -1) return false
+            //console.log("index, cpindex:", index, cpindex)
+            const existing = (x) => {
+                if (x === -1) return false
                 else return true
             }
             let SCHOOL = { ...school }
-            const SCHOOLTODOS = [...school.todos]
-            SCHOOLTODOS.map((TODO) => {
-                if (TODO.deadline !== defaultDeadline) {
-                    if (TODO.checkpoints.length !== 0) {
-                        const CHECKPOINTS = [...TODO.checkpoints]
-                        CHECKPOINTS.map((checkpoint) => {
-                            checkpoint.deadline = TODO.deadline
-                        })
-                        TODO.checkpoints = CHECKPOINTS
-                        return TODO
-                    }
-                }
-
-            })
-            SCHOOL.todos = SCHOOLTODOS
+            //const SCHOOLTODOS = [...school.todos]
             let TODO = { ...SCHOOL.todos[index] }
-            let CHECKPOINTS = [...SCHOOL.todos[index].checkpoints] //關鍵array deep copy!!
-            const CHECKPOINT = { ...Checkpoint }
-            if (!existing(cpindex)) {
-                console.log("checkpoint doesn't exitst")
-                CHECKPOINT.content = event.target.value
-                //set defaultDeadline
-                CHECKPOINTS.map((checkpoint) => {
-                    checkpoint.deadline = TODO.deadline
-                })
-                //
-                CHECKPOINTS.push(CHECKPOINT)
 
+            let CHECKPOINTS = [...SCHOOL.todos[index].checkpoints] //關鍵array deep copy!!
+            let CHECKPOINT = { ...Checkpoint }//checkpoint template
+            if (!existing(cpindex)) {
+                //console.log("checkpoint doesn't exitst")
+                CHECKPOINT.content = event.target.value
+                CHECKPOINT.deadline = TODO.deadline
+                CHECKPOINTS.push(CHECKPOINT)
+                //console.log(index)
                 SCHOOL.todos[index].checkpoints = CHECKPOINTS
+
             } else {
-                console.log("checkpoint exist")
+                //console.log("checkpoint exist")
+
                 return
             }
-            console.log("school", SCHOOL)
-            console.log("leave add checkpoint")
+            // console.log("school", SCHOOL)
+            // console.log("leave add checkpoint")
             setSchool(SCHOOL)
             event.target.value = ""
             return
@@ -265,7 +243,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
         }
         AddSchool.name = schoolNameRef.current.value
         AddSchool.todos = AddSchoolTODOS
-        console.log("AddSchool: ", AddSchool)
+        // console.log("AddSchool: ", AddSchool)
         setAddSchool(AddSchool);
         handleClose();
     }
@@ -395,7 +373,6 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                                                         todo={todo}
                                                         handleSetTodo={handleSetTodo}
                                                         type="checkpoint"
-
                                                         num={findCheckpointIndex(todo, content)}
                                                         pickerlable={`deadline ${index}`} />
                                                 </ListItem>
@@ -403,6 +380,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                                         })}
                                     </List>
                                 </Grid>
+
                                 <Grid className={classes.margin} container spacing={0}
                                     alignItems="flex-end" justify="flex-start">
                                     <Grid item xs={1}>

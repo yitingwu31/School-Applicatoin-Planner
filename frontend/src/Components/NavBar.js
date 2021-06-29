@@ -26,10 +26,6 @@ const NavBar = () => {
         setAddOpen(false);
     };
 
-    useEffect(() => {
-        console.log(addSchool)
-    }, [addSchool])
-
     return (
         <div>
             <Toolbar>
