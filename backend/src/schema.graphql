@@ -10,6 +10,7 @@ type Query {
     userSchool(user: String!, school: String!): School!
     userMonthTodo(user: String!, year: Int!, month: Int!): [Todo]!
     userMonthCheckpoint(user: String!, year: Int!, month: Int!): [Checkpoint]!
+    allByDate(user: String!, year: Int!, month: Int!): [TaskNote]!
 }
 
 input CreateSchoolInput {
@@ -27,6 +28,12 @@ input CreateTodoInput {
 input CreateCheckpointInput {
     content: String!
     time: String!
+}
+
+type TaskNote {
+    type: String!
+    context: String!
+    deadline: String!
 }
 
 type Checkpoint {
