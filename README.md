@@ -34,3 +34,9 @@
 ### 6/27 Emily
 - setup backend graphql and mongoose
 - mutation: createUser, createSchool, createTodo
+
+### 6/29 Emily
+- mutations: addUser, addSchool, addTodo, addCheckpoint
+- queries: user, userSchool, userMonthTodo, userMonthCheckpoint
+- Need to think about how to call three mutations when the user create a school
+- At calendar, query both userMonthTodo and userMonthCheckpoint 
