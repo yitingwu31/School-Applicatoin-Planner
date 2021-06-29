@@ -17,7 +17,7 @@ const MyMonth = () => {
     setCurrentMonth(date);
     console.log("Month change date ", date);
   }
-  const setTime = () => {return}
+  const setTime = () => { return }
 
   return (
     <MonthlyCalendar
@@ -29,7 +29,7 @@ const MyMonth = () => {
         events={[
           { title: 'Call John', date: subHours(new Date(), 1) },
           { title: 'Walk Dog', date: new Date() },
-          { title: 'Web Meeting ^^', date: setTime({ year: 2021, month: 6, date: 27, hour: 11, minute: 0 }) }
+          { title: 'Web Meeting ^^', date: setCalendarTime({ year: 2021, month: 6, date: 27, hour: 11, minute: 0 }) }
         ]}
       >
         <MonthlyDay

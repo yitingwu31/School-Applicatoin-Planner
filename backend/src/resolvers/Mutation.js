@@ -52,10 +52,34 @@ const Mutation = {
                 newtodolist.push(newtodo);
             })
         ).catch ((e) => console.log(e));
-        console.log(newtodolist);
+        // console.log(newtodolist);
         schoolcard.todos.push(...newtodolist);
         await schoolcard.save();
         return newtodolist;
+    },
+
+    // updateTodo(parent, { data }, { db }, info) {
+
+    // },
+
+    async createCheckpoint(parent, { owner, school, task, data }, { db }, info) {
+        const schoolkey = makeSchoolKey(owner, school);
+        const key = `${schoolkey}-${task}`;
+        let todo = await db.TodoModel.findOne({ key: schoolkey, task });
+        if (!todo) {
+            throw new Error("Todo has not been created!");
+        }
+        let newcheckpointlist = [];
+        await Promise.all(
+            data.map(async (checkpoint) => {
+                const { content, time } = checkpoint;
+                let newcheckpoint = await new db.CheckpointModel({ key, content, time }).save();
+                newcheckpointlist.push(newcheckpoint);
+            })
+        ).catch ((e) => console.log(e));
+        todo.checkpoints.push(...newcheckpointlist);
+        await todo.save();
+        return newcheckpointlist;
     }
 }
 
