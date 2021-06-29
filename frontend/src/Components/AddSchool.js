@@ -15,7 +15,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
+import { setCalendarTime, convertTimeString } from '../utils'
 import CommentIcon from '@material-ui/icons/Comment';
 import SchoolIcon from '@material-ui/icons/School';
 import AddIcon from '@material-ui/icons/Add';
@@ -91,19 +91,20 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
         "Letter", "SOP(Statement of Purpose)", "PS(Personal Statement)",
         "GRE/Toefl", "CV/Resume", "Transcripts"
     ]
+    const defaultDeadline = new Date()
     let School = {
         name: "",
         todos: []
     }
     const Todo = {
         name: "",
-        deadline: "yyyy-MM-dd-hh-mm",
+        deadline: defaultDeadline,
         comment: "",
         checkpoints: [],
     };
     const Checkpoint = {
         content: "",
-        deadline: "yyyy-MM-dd-hh-mm"
+        deadline: defaultDeadline
     }
     const initSchool = (School_todos, Todo, School) => {
         let SCHOOL = { ...School }
@@ -117,19 +118,33 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
     }
 
     School = initSchool(School_todos, Todo, School)
-    //console.log("initSchool: ",School)
+
     const [checked, setChecked] = useState([]);
     const [school_todos, setSchoolTodos] = useState(School_todos)
     const [school, setSchool] = useState(School)
     const addTodoRef = useRef();
     const schoolNameRef = useRef();
 
+    useEffect(() => {
+        //const clicked = () => console.log()
+        window.addEventListener('click', handledefaultDeadline)
+        return () => {
+            window.removeEventListener('click', handledefaultDeadline)
+        }
+    }, [school, checked, school_todos])
+
+    const handleAddSchoolName = () => {
+        const SCHOOL = { ...school }
+        SCHOOL.name = schoolNameRef.current.value
+        setSchool(SCHOOL)
+    }
 
     const handleSetTodo = (todo) => {
         let SCHOOL = { ...school }
         //find and replace
         const index = findTodoIndex(todo)
         SCHOOL.todos[index] = todo
+        console.log(SCHOOL)
         setSchool(SCHOOL)
     }
 
@@ -172,66 +187,85 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
         //setSchool(SCHOOL)
         return
     }
-    const handleAddCheckpoint = (todo) => (event) => {
+    const handledefaultDeadline = () => {
+        const SCHOOL = { ...school }
+        const SCHOOLTODOS = [...school.todos]
+        SCHOOLTODOS.map((TODO) => {
+            const CHECKPOINTS = [...TODO.checkpoints]
+            CHECKPOINTS.map((checkpoint) => {
+                checkpoint.deadline = TODO.deadline
+            })
+            TODO.checkpoints = CHECKPOINTS
+            return TODO
+        })
+        SCHOOL.todos = SCHOOLTODOS
+        setSchool(SCHOOL)
+
+    }
+    const handleAddCheckpoint = (todo, Checkpoint) => (event) => {
         if (event.keyCode === 13) {
             console.log("in add checkpoint")
-            //console.log(todo)
-            //console.log(event.target.value)
             //https://stackoverflow.com/a/63724115
             const td = { ...todo }
             const index = findTodoIndex(td)
-
-            const existing = () => {
-                const cpindex = findCheckpointIndex(td, event.target.value)
+            const cpindex = findCheckpointIndex(td, event.target.value)
+            const existing = (cpindex) => {
                 if (cpindex === -1) return false
                 else return true
             }
-            const cpindex = findCheckpointIndex(td, event.target.value)
-            //console.log("todo index",index)
-            console.log("cpindex", cpindex)
             let SCHOOL = { ...school }
-            console.log("old todo: ", SCHOOL.todos)
-            // let CHECKPOINTS = SCHOOL.todos[index].checkpoints
-            // console.log("old checkpoints: ", CHECKPOINTS)
-            // const CHECKPOINT = { ...Checkpoint }
-            // console.log("checkpoint template: ", CHECKPOINT)
+            const SCHOOLTODOS = [...school.todos]
+            SCHOOLTODOS.map((TODO) => {
+                if (TODO.deadline !== defaultDeadline) {
+                    if (TODO.checkpoints.length !== 0) {
+                        const CHECKPOINTS = [...TODO.checkpoints]
+                        CHECKPOINTS.map((checkpoint) => {
+                            checkpoint.deadline = TODO.deadline
+                        })
+                        TODO.checkpoints = CHECKPOINTS
+                        return TODO
+                    }
+                }
 
-            if (cpindex === -1) {
-                //checkpoint doesn't exitst
-                let CHECKPOINTS = SCHOOL.todos[index].checkpoints
-                console.log("old checkpoints: ", CHECKPOINTS)
-                const CHECKPOINT = { ...Checkpoint }
-                console.log("checkpoint template: ", CHECKPOINT)
+            })
+            SCHOOL.todos = SCHOOLTODOS
+            let TODO = { ...SCHOOL.todos[index] }
+            let CHECKPOINTS = [...SCHOOL.todos[index].checkpoints] //關鍵array deep copy!!
+            const CHECKPOINT = { ...Checkpoint }
+            if (!existing(cpindex)) {
                 console.log("checkpoint doesn't exitst")
                 CHECKPOINT.content = event.target.value
+                //set defaultDeadline
+                CHECKPOINTS.map((checkpoint) => {
+                    checkpoint.deadline = TODO.deadline
+                })
+                //
                 CHECKPOINTS.push(CHECKPOINT)
-                console.log("pushed checkpoints: ", CHECKPOINTS)
-                const checkpointindex = findCheckpointIndex(td, event.target.value)
-                console.log("checkpointindex: ", checkpointindex)
-                console.log("new cp: ", CHECKPOINTS)
-                console.log("todos: ", SCHOOL.todos[index])
-                SCHOOL.todos[checkpointindex].checkpoints = CHECKPOINTS
 
+                SCHOOL.todos[index].checkpoints = CHECKPOINTS
             } else {
-                //checkpoint already exitst
                 console.log("checkpoint exist")
                 return
             }
             console.log("school", SCHOOL)
             console.log("leave add checkpoint")
             setSchool(SCHOOL)
-
+            event.target.value = ""
             return
         }
     }
     const handleAddSchool = () => {
-        const schoolname = schoolNameRef.current.value
-        console.log(schoolname)
-        console.log(checked)
-        const AddSchool = {
-            SchoolName: schoolname,
-            SchoolTodos: checked
+        let AddSchool = { ...school }
+        const SCHOOLTODOS = [...school.todos]
+        let AddSchoolTODOS = []
+        for (let i = 0; i < SCHOOLTODOS.length; i++) {
+            if (checked.includes(SCHOOLTODOS[i].name)) {
+                AddSchoolTODOS.push(SCHOOLTODOS[i])
+            }
         }
+        AddSchool.name = schoolNameRef.current.value
+        AddSchool.todos = AddSchoolTODOS
+        console.log("AddSchool: ", AddSchool)
         setAddSchool(AddSchool);
         handleClose();
     }
@@ -322,9 +356,11 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                                         label={value}
                                     />
                                 </Grid>
+
                                 <Grid item xs={4}>
                                     <DatePicker todo={todo} handleSetTodo={handleSetTodo}
-                                        type="todo" pickerlable={`Complete Time ${index}`} />
+                                        type="todo"
+                                        pickerlable={`Complete Time ${index}`} />
                                 </Grid>
                             </AccordionSummary>
                             <AccordionDetails>
@@ -359,6 +395,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                                                         todo={todo}
                                                         handleSetTodo={handleSetTodo}
                                                         type="checkpoint"
+
                                                         num={findCheckpointIndex(todo, content)}
                                                         pickerlable={`deadline ${index}`} />
                                                 </ListItem>
@@ -375,7 +412,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                                         <TextField
                                             id="add-checkpoint-input"
                                             label="Add Checkpoint"
-                                            onKeyDown={handleAddCheckpoint(todo)}
+                                            onKeyDown={handleAddCheckpoint(todo, Checkpoint)}
                                         />
                                     </Grid>
                                 </Grid>
@@ -403,72 +440,6 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
         )
     }
 
-
-    const customList = (title, items) => (
-        <Card>
-            <CardHeader
-                className={classes.cardHeader}
-                avatar={
-                    <Checkbox
-                        onClick={handleToggleAll(items)}
-                        checked={numberOfChecked(items) === items.length && items.length !== 0}
-                        indeterminate={numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0}
-                        disabled={items.length === 0}
-                        inputProps={{ 'aria-label': 'all items selected' }}
-                    />
-                }
-                title={title}
-                subheader={`${numberOfChecked(items)}/${items.length} selected`}
-            />
-            <Divider />
-            <List className={classes.list} dense component="div" role="list">
-                {items.map((value, index) => {
-                    const labelId = `transfer-list-all-item-${index}-label`;
-
-                    return (
-                        <Grid container spacing={2} >
-                            <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
-                                <Grid item xs={1}>
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            checked={checked.indexOf(value) !== -1}
-                                            tabIndex={-1}
-                                            disableRipple
-                                            inputProps={{ 'aria-labelledby': labelId }}
-                                        />
-                                    </ListItemIcon>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <ListItemText id={labelId} primary={value} />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <DatePicker pickerlable={`Complete Time ${index}`} />
-                                </Grid>
-
-                            </ListItem>
-                        </Grid>
-                    );
-                })}
-                <Divider />
-                <Grid className={classes.margin} container spacing={0} alignItems="flex-end" justify="flex-start">
-                    <ListItem button >
-                        <Grid item xs={1}>
-                            <AddIcon />
-                        </Grid>
-                        <Grid item xs={11}>
-                            <TextField
-                                id="add-todo-input"
-                                label="Add Todo"
-                                inputRef={addTodoRef}
-                                onKeyDown={handleAddTodo} />
-                        </Grid>
-                    </ListItem>
-                </Grid>
-            </List>
-        </Card >
-    );
-
-
     return (
         <div>
             <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title"
@@ -485,7 +456,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                             <Grid item>
                                 <TextField id="input-with-icon-grid"
                                     label="School Name" inputRef={schoolNameRef}
-                                    onChange={(e) => { console.log(e.target.value) }}
+                                //onChange={handleAddSchoolName}
                                 />
                             </Grid>
                         </Grid>
