@@ -26,6 +26,8 @@ const NavBar = () => {
         setAddOpen(false);
     };
 
+    
+
     return (
         <div>
             <Toolbar>

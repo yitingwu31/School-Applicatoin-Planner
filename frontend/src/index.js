@@ -7,7 +7,7 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  HttpLink
+  HttpLink,
 } from "@apollo/client";
 
 import { split } from 'apollo-link';

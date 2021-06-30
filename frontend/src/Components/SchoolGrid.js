@@ -112,9 +112,6 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
     setMissing(ret);
     const olddone = doneNum;
     setDoneNum(olddone + 1);
-    console.log(olddone, allNum);
-    let kk = Math.round((olddone + 1) / allNum * 100);
-    console.log(kk);
     setPercent(Math.round((olddone + 1) / allNum * 100));
   }
 
