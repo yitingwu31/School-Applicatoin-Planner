@@ -7,6 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useMutation } from '@apollo/client';
 import { COMPLETE_CHECKPOINT_MUTATION } from '../graphql';
+import { dateDisplay } from '../utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +70,7 @@ export default function CheckpointList ({ checkpoints, user }) {
         const labelId = `checkbox-list-secondary-label-${index}`;
         return (
           <ListItem key={index} button>
-            <ListItemText id={labelId} primary={`${check.content}`} secondary={check.time}/>
+            <ListItemText id={labelId} primary={`${check.content}`} secondary={dateDisplay(check.time)}/>
             <ListItemSecondaryAction>
               <Checkbox
                 edge="end"

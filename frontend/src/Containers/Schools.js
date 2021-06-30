@@ -98,7 +98,7 @@ const Schools = () => {
     if (!loading && !error) {
       const schoolList = data.userSchool;
       let sortedSchools = schoolList.slice();
-      sortedSchools.sort((a, b) => compareTime(a.deadline, b.deadline));
+      sortedSchools.sort((a, b) => compareTime(a, b));
       setSchools(sortedSchools);
     }
   }, [data]);
@@ -115,6 +115,7 @@ const Schools = () => {
                 todos = {school.todos}
                 rate = {index + 1}
                 user = {user}
+                completed = {school.completed}
               />
             ))}
           </div>

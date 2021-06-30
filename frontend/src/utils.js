@@ -20,16 +20,20 @@ export const convertTimeString = ({ year, month, date, hour=12, minute=0 }) => {
 };
 
 export const compareTime = (a, b) => {
-    const date1 = a.split('-');
-    const date2 = b.split('-');
+    const c1 = a.completed;
+    const c2 = b.completed;
+    const date1 = a.deadline.split('-');
+    const date2 = b.deadline.split('-');
+    if (c1 === true && c2 === false) return 1;
+    if (c1 === false && c2 === true) return -1;
     if (
         (date1[0] > date2[0]) ||
         (date1[0] === date2[0] && date1[1] > date2[1]) ||
         (date1[0] === date2[0] && date1[1] === date2[1] && date1[2] > date2[2])
     ) {
-        return 1;
+        return 1;   // later
     }
-    return -1;
+    return -1;  // sooner
 };
 
 

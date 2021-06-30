@@ -29,3 +29,13 @@ export const COMPLETE_CHECKPOINT_MUTATION = gql`
         )
     }
 `;
+
+export const COMPLETE_SCHOOL_MUTATION = gql`
+    mutation completeSchool (
+        $key: String!
+    ) {
+        completeSchool (
+            key: $key
+        )
+    }
+`;

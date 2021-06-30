@@ -8,6 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CheckpointList from './CheckpointList';
 import { useMutation } from '@apollo/client';
 import { COMPLETE_TODO_MUTATION } from '../graphql';
+import { dateDisplay } from '../utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 360,
     backgroundColor: '#E9EAEC',
     marginLeft: 'auto',
-    marginRight: 'auto',
+    marginRight: 'auto'
   },
 }));
 
@@ -53,9 +54,6 @@ export default function CheckboxListSecondary({ todos, user }) {
   };
 
   const handleCheck = async (index) => {
-    // call mutation
-    // console.log(todos[index]);
-    // console.log(todos[index].key.split('-')[1]);
     await completeTodo({
       variables: {
         user: user,
@@ -72,7 +70,7 @@ export default function CheckboxListSecondary({ todos, user }) {
         return (
           <div>
           <ListItem key={index} button>
-            <ListItemText id={labelId} primary={todo.task} secondary={todo.deadline}/>
+            <ListItemText id={labelId} primary={todo.task} secondary={dateDisplay(todo.deadline)}/>
             <ListItemSecondaryAction>
               <Checkbox
                 edge="end"

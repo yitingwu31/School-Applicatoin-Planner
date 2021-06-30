@@ -53,9 +53,17 @@ const Mutation = {
         return newschool;
     },
 
-    // updateSchool(parent, { data }, { db }, info) {
-
-    // },
+    async completeSchool(parent, { key }, { db }, info) {
+        try {
+            let school = await db.SchoolModel.findOne({ key });
+            school.completed = true;
+            await school.save();
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+        return true;
+    },
 
     async createTodo(parent, { owner, school, data }, { db, pubsub }, info) {
         const key = makeSchoolKey(owner, school);
