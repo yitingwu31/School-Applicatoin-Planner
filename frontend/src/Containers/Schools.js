@@ -1,6 +1,6 @@
 import School_grid from '../Components/SchoolGrid'
 import { useQuery } from '@apollo/react-hooks';
-import { USER_SCHOOL_QUERY } from '../graphql';
+import { USER_SCHOOL_QUERY, SCHOOL_SUBSCRIPTION } from '../graphql';
 import { useState, useEffect } from 'react';
 import { compareTime } from '../utils';
 
@@ -89,20 +89,41 @@ const Schools = () => {
   const { loading, error, data, subscribeToMore } = useQuery(USER_SCHOOL_QUERY, {
     variables: {
       user: user
-    }
+    },
+    fetchPolicy: "cache-and-network"
   });
 
   useEffect(() => {
     if (loading) console.log("Loading...");
     if (error) console.log("Error: ", error);
     if (!loading && !error) {
-      console.log("School query done!");
+      // console.log("School query done!");
       const schoolList = data.userSchool;
       let sortedSchools = schoolList.slice();
       sortedSchools.sort((a, b) => compareTime(a, b));
       setSchools(sortedSchools);
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log("catch subscription!")
+    try {
+      subscribeToMore({
+        document: SCHOOL_SUBSCRIPTION,
+        variables: { user: user },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newSchool = subscriptionData.data.school.data;
+          setSchools([newSchool, ...prev.userSchool]);
+          
+          return {
+            ...prev,
+            schools: [newSchool, ...prev.userSchool],
+          }
+        }
+      })
+    } catch(e) { console.log(e) }
+  }, [subscribeToMore]);
 
   return (
       <div>

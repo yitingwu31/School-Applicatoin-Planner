@@ -6,7 +6,6 @@ import MonthlyEventItem from './MonthlyEventItem';
 
 import { setCalendarTime } from '../utils';
 import { useQuery } from '@apollo/react-hooks';
-import { subscribe } from 'graphql';
 
 const MyMonthlyBody = ({ user, year, month }) => {
     const [events, setEvents] = useState([]);
@@ -15,21 +14,20 @@ const MyMonthlyBody = ({ user, year, month }) => {
             user: user,
             year: year,
             month: month
-        }
+        },
+        fetchPolicy: "cache-and-network"
     });
 
     useEffect(() => {
         if (loading) console.log("Loading...");
         if (error) console.log("Error: ", error);
         if (!loading && !error) {
-            console.log("calendar query done!")
             const tasklist = data.allByDate;
             let newEvents = [];
             tasklist.map((row) => {
                 newEvents.push({ title: row.context, date: setCalendarTime(row.deadline), completed: row.completed })
             })
             setEvents(newEvents);
-            console.log("newEvents: ", newEvents);
         }
     }, [data])
     
