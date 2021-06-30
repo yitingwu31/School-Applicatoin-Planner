@@ -17,6 +17,11 @@ type Query {
     allByDate(user: String!, year: Int!, month: Int!): [TaskNote]!
 }
 
+type Subscription {
+    todo(user: String!): TodoSubscriptionPayload!
+    checkpoint(user: String!): CheckpointSubscriptionPayload!
+}
+
 input CreateSchoolInput {
     owner: String!
     name: String!
@@ -70,4 +75,20 @@ type User {
     id: ID!
     name: String!
     schools: [School!]
+}
+
+enum MutationType {
+    CREATED
+    UPDATED
+    COMPLETED
+}
+
+type TodoSubscriptionPayload {
+    mutation: MutationType!
+    data: [Todo!]!
+}
+
+type CheckpointSubscriptionPayload {
+    mutation: MutationType!
+    data: [Checkpoint!]!
 }

@@ -11,6 +11,25 @@ const checkUser = async (db, name) => {
         .execPopulate();
 }
 
+const publishTodo = (user, pubsub, type, newdata) => {
+    console.log(newdata);
+    pubsub.publish(`todo ${user}`, {
+        todo: {
+            mutation: type,
+            data: newdata
+        },
+    });
+}
+
+const publishCheckpoint = (user, pubsub, type, newdata) => {
+    pubsub.publish(`checkpoint ${user}`, {
+        checkpoint: {
+            mutation: type,
+            data: newdata
+        }
+    })
+}
+
 
 const Mutation = {
     async createUser(parent, { name }, { db }, info) {
@@ -38,7 +57,7 @@ const Mutation = {
 
     // },
 
-    async createTodo(parent, { owner, school, data }, { db }, info) {
+    async createTodo(parent, { owner, school, data }, { db, pubsub }, info) {
         const key = makeSchoolKey(owner, school);
         let schoolcard = await db.SchoolModel.findOne({ key });
         if (!schoolcard) {
@@ -55,15 +74,17 @@ const Mutation = {
         // console.log(newtodolist);
         schoolcard.todos.push(...newtodolist);
         await schoolcard.save();
+        publishTodo(owner, pubsub, 'CREATED', newtodolist);
         return newtodolist;
     },
 
-    async updateTodo(parent, { user, school, task, date }, { db }, info) {
+    async updateTodo(parent, { user, school, task, date }, { db, pubsub }, info) {
         const key = makeSchoolKey(user, school);
         try {
             let todo = await db.TodoModel.findOne({ key, task });
             todo.deadline = date;
             await todo.save();
+            publishTodo(user, pubsub, 'UPDATED', new Array(todo));
         } catch (e) {
             console.log(e);
             return false;
@@ -71,12 +92,13 @@ const Mutation = {
         return true;
     },
 
-    async completeTodo(parent, { user, school, task }, { db }, info) {
+    async completeTodo(parent, { user, school, task }, { db, pubsub }, info) {
         const key = makeSchoolKey(user, school);
         try {
             let todo = await db.TodoModel.findOne({ key, task });
             todo.completed = true;
             await todo.save();
+            publishTodo(user, pubsub, 'COMPLETED', new Array(todo));
         } catch (e) {
             console.log(e);
             return false;
@@ -84,7 +106,7 @@ const Mutation = {
         return true;
     },
 
-    async createCheckpoint(parent, { owner, school, task, data }, { db }, info) {
+    async createCheckpoint(parent, { owner, school, task, data }, { db, pubsub }, info) {
         const schoolkey = makeSchoolKey(owner, school);
         const key = makeCheckpointKey(owner, school, task);
         let todo = await db.TodoModel.findOne({ key: schoolkey, task });
@@ -101,15 +123,17 @@ const Mutation = {
         ).catch ((e) => console.log(e));
         todo.checkpoints.push(...newcheckpointlist);
         await todo.save();
+        publishCheckpoint(owner, pubsub, 'CREATED', newcheckpointlist);
         return newcheckpointlist;
     },
 
-    async updateCheckpoint(parent, { user, school, task, content, date }, { db }, info) {
+    async updateCheckpoint(parent, { user, school, task, content, date }, { db, pubsub }, info) {
         const key = makeCheckpointKey(user, school, task);
         try {
             let checkpoint = await db.CheckpointModel.findOne({ key, content });
             checkpoint.time = date;
             await checkpoint.save();
+            publishCheckpoint(user, pubsub, 'UPDATED', new Array(checkpoint));
         } catch (e) {
             console.log(e);
             return false;
@@ -117,12 +141,13 @@ const Mutation = {
         return true;
     },
 
-    async completeCheckpoint(parent, { user, school, task, content }, { db }, info){
+    async completeCheckpoint(parent, { user, school, task, content }, { db, pubsub }, info){
         const key = makeCheckpointKey(user, school, task);
         try {
             let checkpoint = await db.CheckpointModel.findOne({ key, content });
             checkpoint.completed = true;
             await checkpoint.save();
+            publishCheckpoint(user, pubsub, 'COMPLETED', new Array(checkpoint));
         } catch (e) {
             console.log(e);
             return false;

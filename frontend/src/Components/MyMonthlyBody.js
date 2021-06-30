@@ -5,6 +5,7 @@ import { CALENDARMONTH_QUERY } from '../graphql';
 
 import { setCalendarTime } from '../utils';
 import { useQuery } from '@apollo/react-hooks';
+import { subscribe } from 'graphql';
 
 const MyMonthlyBody = ({ year, month }) => {
     const [events, setEvents] = useState([]);
@@ -37,7 +38,7 @@ const MyMonthlyBody = ({ year, month }) => {
             <MonthlyDay
                 renderDay={data =>
                 data.map((item, index) => {
-                    console.log(item.title, item.date);
+                    // console.log(item.title, item.date);
                     return (
                     <DefaultMonthlyEventItem
                         key={index}

@@ -55,3 +55,8 @@
 
 - Add checkpoint & deadline
 - TBD: call backend API
+
+### 6/30 Emily
+- Backend add update and complete tasks mutations, subscriptions
+- Frontend calendar view query done
+- TBD: Frontend subscription, schoolcards view and update tasks
