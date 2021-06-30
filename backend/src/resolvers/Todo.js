@@ -1,7 +1,7 @@
 const Todo = {
     checkpoints(parent, args, { db }, info) {
         return Promise.all(
-            parent.checkpoints.map((cId) => db.CheckpointModel.findById(tId)),
+            parent.checkpoints.map((tId) => db.CheckpointModel.findById(tId)),
         );
     },
 };
