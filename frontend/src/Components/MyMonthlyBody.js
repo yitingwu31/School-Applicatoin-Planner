@@ -24,11 +24,9 @@ const MyMonthlyBody = ({ user, year, month }) => {
         if (!loading && !error) {
             const tasklist = data.allByDate;
             let newEvents = [];
-            console.log("tasklist: ", tasklist);
             tasklist.map((row) => {
-                newEvents.push({ title: row.context, date: setCalendarTime(row.deadline) })
+                newEvents.push({ title: row.context, date: setCalendarTime(row.deadline), completed: row.completed })
             })
-            console.log("newevents: ", newEvents);
             setEvents(newEvents);
         }
     }, [data])
@@ -43,6 +41,7 @@ const MyMonthlyBody = ({ user, year, month }) => {
                     <MonthlyEventItem 
                         key={index}
                         title={item.title}
+                        cp={item.completed}
                     />
                 )
             })
