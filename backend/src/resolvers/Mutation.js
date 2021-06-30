@@ -11,26 +11,6 @@ const checkUser = async (db, name) => {
         .execPopulate();
 }
 
-const publishTodo = (user, pubsub, type, newdata) => {
-    console.log(newdata);
-    pubsub.publish(`todo ${user}`, {
-        todo: {
-            mutation: type,
-            data: newdata
-        },
-    });
-}
-
-const publishCheckpoint = (user, pubsub, type, newdata) => {
-    pubsub.publish(`checkpoint ${user}`, {
-        checkpoint: {
-            mutation: type,
-            data: newdata
-        }
-    })
-}
-
-
 const Mutation = {
     async createUser(parent, { name }, { db }, info) {
         let user = await db.UserModel.findOne({ name });
@@ -43,13 +23,17 @@ const Mutation = {
 
     async createSchool(parent, { data }, { db }, info) {
         const { owner, name, deadline } = data;
-        // owner: username, name: school name
         let user = await checkUser(db, owner);
         const key = makeSchoolKey(owner, name);
-        let newschool = await new db.SchoolModel({ key, name, deadline, completed: false }).save();
-        user.schools.push(newschool);
-        await user.save();
-
+        let newschool = await db.SchoolModel.findOne({ key });
+        if (!newschool) {
+            newschool = await new db.SchoolModel({ key, name, deadline, completed: false }).save();
+            user.schools.push(newschool);
+            await user.save();
+        } else {
+            newschool.deadline = deadline;
+            await newschool.save();
+        }
         return newschool;
     },
 
@@ -75,24 +59,35 @@ const Mutation = {
         await Promise.all(
             data.map(async (todo) => {
                 const { task, deadline, comment } = todo;
-                let newtodo = await new db.TodoModel({ key, task, deadline, comment, completed: false }).save();
-                newtodolist.push(newtodo);
+                let newtodo = await db.TodoModel.findOne({ key, task });
+                if (!newtodo) {
+                    newtodo = await new db.TodoModel({ key, task, deadline, comment, completed: false }).save();
+                    newtodolist.push(newtodo);
+                } else {
+                    newtodo.deadline = deadline;
+                    newtodo.comment = comment;
+                    await newtodo.save();
+                }
             })
         ).catch ((e) => console.log(e));
         // console.log(newtodolist);
         schoolcard.todos.push(...newtodolist);
         await schoolcard.save();
-        publishTodo(owner, pubsub, 'CREATED', newtodolist);
+        pubsub.publish(`school ${owner}`, {
+            school: {
+                mutation: 'CREATED',
+                data: schoolcard
+            }
+        })
         return newtodolist;
     },
 
-    async updateTodo(parent, { user, school, task, date }, { db, pubsub }, info) {
+    async updateTodo(parent, { user, school, task, date }, { db }, info) {
         const key = makeSchoolKey(user, school);
         try {
             let todo = await db.TodoModel.findOne({ key, task });
             todo.deadline = date;
             await todo.save();
-            publishTodo(user, pubsub, 'UPDATED', new Array(todo));
         } catch (e) {
             console.log(e);
             return false;
@@ -100,13 +95,12 @@ const Mutation = {
         return true;
     },
 
-    async completeTodo(parent, { user, school, task }, { db, pubsub }, info) {
+    async completeTodo(parent, { user, school, task }, { db }, info) {
         const key = makeSchoolKey(user, school);
         try {
             let todo = await db.TodoModel.findOne({ key, task });
             todo.completed = true;
             await todo.save();
-            publishTodo(user, pubsub, 'COMPLETED', new Array(todo));
         } catch (e) {
             console.log(e);
             return false;
@@ -116,6 +110,7 @@ const Mutation = {
 
     async createCheckpoint(parent, { owner, school, task, data }, { db, pubsub }, info) {
         const schoolkey = makeSchoolKey(owner, school);
+        let schoolcard = await db.SchoolModel.findOne({ key: schoolkey });
         const key = makeCheckpointKey(owner, school, task);
         let todo = await db.TodoModel.findOne({ key: schoolkey, task });
         if (!todo) {
@@ -125,23 +120,33 @@ const Mutation = {
         await Promise.all(
             data.map(async (checkpoint) => {
                 const { content, time } = checkpoint;
-                let newcheckpoint = await new db.CheckpointModel({ key, content, time, completed: false }).save();
-                newcheckpointlist.push(newcheckpoint);
+                let newcheckpoint = await db.CheckpointModel.findOne({ key, content });
+                if (!newcheckpoint) {
+                    newcheckpoint = await new db.CheckpointModel({ key, content, time, completed: false }).save();
+                    newcheckpointlist.push(newcheckpoint);
+                } else {
+                    newcheckpoint.time = time;
+                    await newcheckpoint.save();
+                }
             })
         ).catch ((e) => console.log(e));
         todo.checkpoints.push(...newcheckpointlist);
         await todo.save();
-        publishCheckpoint(owner, pubsub, 'CREATED', newcheckpointlist);
+        pubsub.publish(`school ${owner}`, {
+            school: {
+                mutation: 'CREATED',
+                data: schoolcard
+            }
+        })
         return newcheckpointlist;
     },
 
-    async updateCheckpoint(parent, { user, school, task, content, date }, { db, pubsub }, info) {
+    async updateCheckpoint(parent, { user, school, task, content, date }, { db }, info) {
         const key = makeCheckpointKey(user, school, task);
         try {
             let checkpoint = await db.CheckpointModel.findOne({ key, content });
             checkpoint.time = date;
             await checkpoint.save();
-            publishCheckpoint(user, pubsub, 'UPDATED', new Array(checkpoint));
         } catch (e) {
             console.log(e);
             return false;
@@ -149,13 +154,12 @@ const Mutation = {
         return true;
     },
 
-    async completeCheckpoint(parent, { user, school, task, content }, { db, pubsub }, info){
+    async completeCheckpoint(parent, { user, school, task, content }, { db }, info){
         const key = makeCheckpointKey(user, school, task);
         try {
             let checkpoint = await db.CheckpointModel.findOne({ key, content });
             checkpoint.completed = true;
             await checkpoint.save();
-            publishCheckpoint(user, pubsub, 'COMPLETED', new Array(checkpoint));
         } catch (e) {
             console.log(e);
             return false;

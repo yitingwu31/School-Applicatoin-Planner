@@ -6,7 +6,6 @@ import MonthlyEventItem from './MonthlyEventItem';
 
 import { setCalendarTime } from '../utils';
 import { useQuery } from '@apollo/react-hooks';
-import { subscribe } from 'graphql';
 
 const MyMonthlyBody = ({ user, year, month }) => {
     const [events, setEvents] = useState([]);
@@ -15,7 +14,8 @@ const MyMonthlyBody = ({ user, year, month }) => {
             user: user,
             year: year,
             month: month
-        }
+        },
+        fetchPolicy: "cache-and-network"
     });
 
     useEffect(() => {

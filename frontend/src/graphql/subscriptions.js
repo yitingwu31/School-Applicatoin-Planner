@@ -1,18 +1,31 @@
 import { gql } from '@apollo/client';
 
-export const TODO_SUBSCRIPTION = gql`
-    subscription todo (
+export const SCHOOL_SUBSCRIPTION = gql`
+    subscription school (
         $user: String!
     ) {
-        todo (
+        school (
             user: $user
         ) {
             mutation
             data {
-                key
-                task
+                name
                 deadline
+                key
+                completed
+                todos {
+                    key
+                    task
+                    deadline
+                    completed
+                    checkpoints {
+                        key
+                        content
+                        time
+                        completed
+                    }
+                }
             }
         }
     }
-`;
+`

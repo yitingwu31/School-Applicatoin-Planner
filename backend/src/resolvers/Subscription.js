@@ -1,12 +1,11 @@
 const Subscription = {
-    todo: {
-        async subscribe(parent, { user }, { pubsub }, info) {
-            return pubsub.asyncIterator(`todo ${user}`);
-        }
-    },
-    checkpoint: {
-        async subscribe(parent, { user }, { pubsub }, info) {
-            return pubsub.asyncIterator(`checkpoint ${user}`);
+    school: {
+        async subscribe(parent, { user }, { db, pubsub }, info) {
+            let student = await db.UserModel.findOne({ name: user });
+            if (!student) {
+                throw new Error("User not found!");
+            }
+            return pubsub.asyncIterator(`school ${user}`);
         }
     }
 }
