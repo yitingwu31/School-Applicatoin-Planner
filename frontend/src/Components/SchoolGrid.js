@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ProgressBar from '../Components/ProgressBar'
 import ToDoList from '../Components/ToDoList'
 import Avatar from '@material-ui/core/Avatar';
+import { dateDisplay } from '../utils';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,8 +54,8 @@ export default function SchoolCard({key, name, date, todos, rate, user}) {
   const [expanded, setExpanded] = React.useState(false);
 
   const findMissing = (todos) => {
-    let missing = todos.filter((todo) => todo.completed == false);
-    if (missing.length == 0) {
+    let missing = todos.filter((todo) => todo.completed === false);
+    if (missing.length === 0) {
       return 'All done!'
     }
     let ret = 'Missing: ';
@@ -92,7 +93,7 @@ export default function SchoolCard({key, name, date, todos, rate, user}) {
             </Grid>
             <Grid item xs={3}>
                 <Typography variant="subtitle1">Upcoming Date:</Typography>
-                <Typography variant="subtitle1">{date}</Typography>
+                <Typography variant="subtitle1">{dateDisplay(date)}</Typography>
             </Grid>
         </Grid>
       </CardContent>

@@ -28,7 +28,7 @@ export default function CheckpointList ({ checkpoints, user }) {
   useEffect(() => {
     let chk = [];
     checkpoints.map((check, idx) => {
-      if (check.completed == true) {
+      if (check.completed === true) {
         chk.push(idx);
       }
     })

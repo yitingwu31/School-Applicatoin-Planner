@@ -29,7 +29,7 @@ export default function CheckboxListSecondary({ todos, user }) {
   useEffect(() => {
     let chk = [];
     todos.map((todo, idx) => {
-      if (todo.completed == true) {
+      if (todo.completed === true) {
         chk.push(idx);
       }
     })

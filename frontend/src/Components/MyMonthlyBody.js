@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { MonthlyBody, MonthlyDay, DefaultMonthlyEventItem } from '@zach.codes/react-calendar';
+import { MonthlyBody, MonthlyDay } from '@zach.codes/react-calendar';
 import { CALENDARMONTH_QUERY } from '../graphql';
+import MonthlyEventItem from './MonthlyEventItem';
 
 import { setCalendarTime } from '../utils';
 import { useQuery } from '@apollo/react-hooks';
@@ -23,11 +24,11 @@ const MyMonthlyBody = ({ user, year, month }) => {
         if (!loading && !error) {
             const tasklist = data.allByDate;
             let newEvents = [];
-            // console.log("tasklist: ", tasklist);
+            console.log("tasklist: ", tasklist);
             tasklist.map((row) => {
                 newEvents.push({ title: row.context, date: setCalendarTime(row.deadline) })
             })
-            // console.log("newevents: ", newEvents);
+            console.log("newevents: ", newEvents);
             setEvents(newEvents);
         }
     }, [data])
@@ -38,12 +39,10 @@ const MyMonthlyBody = ({ user, year, month }) => {
             <MonthlyDay
                 renderDay={data =>
                 data.map((item, index) => {
-                    // console.log(item.title, item.date);
                     return (
-                    <DefaultMonthlyEventItem
+                    <MonthlyEventItem 
                         key={index}
                         title={item.title}
-                        date={format(item.date, 'k:mm')}
                     />
                 )
             })

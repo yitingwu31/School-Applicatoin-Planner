@@ -4,12 +4,12 @@ export const setCalendarTime = ( datestring ) => {
     d.setFullYear(date[0]);
     d.setMonth(date[1] - 1);
     d.setDate(date[2]);
-    d.setHours(date[3]);
-    d.setMinutes(date[4]);
+    d.setHours(12);
+    d.setMinutes(0);
     return d;
 };
 
-export const convertTimeString = ({ year, month, date, hour, minute }) => {
+export const convertTimeString = ({ year, month, date, hour=12, minute=0 }) => {
     const yyyy = toString(year);
     const mm = month < 10 ? `0${toString(month)}` : toString(month);
     const dd = date < 10 ? `0${toString(date)}` : toString(date);
@@ -31,3 +31,9 @@ export const compareTime = (a, b) => {
     }
     return -1;
 };
+
+
+export const dateDisplay = (datestring) => {
+    const date = datestring.split('-');
+    return `${date[0]}/${date[1]}/${date[2]}`
+}
