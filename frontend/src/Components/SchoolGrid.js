@@ -56,6 +56,7 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
   const [expanded, setExpanded] = React.useState(false);
 
   const [missing, setMissing] = useState();
+  const [percent, setPercent] = useState(0);
   const [completeSchool] = useMutation(COMPLETE_SCHOOL_MUTATION);
 
   useEffect(() => {
@@ -78,6 +79,9 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
 
   const findMissing = (todos) => {
     let missing = todos.filter((todo) => todo.completed === false);
+    const per = Math.round((todos.length - missing.length) / todos.length * 100);
+    setPercent(per);
+    console.log(name, per);
     if (missing.length === 0) {
       return 'All done!'
     }
@@ -100,9 +104,9 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
         avatar={
             <Avatar className={classes.avatar}>{rate}</Avatar>
         }
-        action={
-            <Button color="primary">Edit</Button>
-        }
+        // action={
+        //     <Button color="primary">Edit</Button>
+        // }
       />
       
       <CardContent>
@@ -111,7 +115,7 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
                 <Typography className={classes.grid}>{name}</Typography>
             </Grid>
             <Grid item xs={6}>
-                <ProgressBar/>
+                <ProgressBar percent={percent}/>
                 <Typography>{missing}</Typography>
             </Grid>
             <Grid item xs={3}>
