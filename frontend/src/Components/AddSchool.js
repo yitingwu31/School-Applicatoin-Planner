@@ -113,19 +113,18 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
     const [createCheckpoint, { checkpointdata }] = useMutation(CREATE_CHECKPOINT_MUTATION)
 
 
-    const handleMutation = () => {
+    const handleMutation = async (addSchool) => {
         const owner = "Emily" //modify later
-        createSchool({
+        await createSchool({
             variables: {
                 owner: owner,
                 name: addSchool.name,
                 deadline: addSchool.deadline
-
             }
         })
         for (let i = 0; i < addSchool.todos.length; i++) {
             let addTodo = { ...addSchool.todos[i] }
-            createTodo({
+            await createTodo({
                 variables: {
                     owner: owner,
                     school: addSchool.name,
@@ -137,7 +136,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
             })
             for (let j = 0; i < addTodo.checkpoints.length; i++) {
                 let addCheckpoint = { ...addTodo.checkpoints[j] }
-                createCheckpoint({
+                await createCheckpoint({
                     variables: {
                         owner: owner,
                         school: addSchool.name,
@@ -148,15 +147,6 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
                 })
             }
         }
-
-        createCheckpoint({
-            variables: {
-                owner: owner,
-                name: addSchool.name,
-                deadline: addSchool.deadline
-            }
-        })
-
     }
 
     const findTodoIndex = (todo) => {
@@ -206,7 +196,11 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
 
         AddSchool.name = schoolNameRef.current.value
         AddSchool.todos = AddSchoolTODOS
+
+        
+
         console.log("AddSchool: ", AddSchool)
+        handleMutation(AddSchool)
         setAddSchool(AddSchool);
         handleClose();
     }
@@ -262,7 +256,6 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
                     <Button autoFocus onClick={() => {
                         handleClose()
                         handleAddSchool()
-                        handleMutation()
                     }} color="primary" >
                         OK
                     </Button>

@@ -18,12 +18,10 @@ export const convertTimeString = ({ year, month, date, hour=12, minute=0 }) => {
     const min = minute < 10 ? `0${toString(minute)}` : toString(minute);
     
     return `${yyyy}-${mm}-${dd}-${hh}-${min}`;
-<<<<<<< HEAD
 }
 
 export const Time2String =(date)=>{
     return moment(date).format("YYYY-MM-DD")
-=======
 };
 
 export const compareTime = (a, b) => {
@@ -47,5 +45,4 @@ export const compareTime = (a, b) => {
 export const dateDisplay = (datestring) => {
     const date = datestring.split('-');
     return `${date[0]}/${date[1]}/${date[2]}`
->>>>>>> 6085e80842fd84ca66198037d839414a83402e27
 }
