@@ -20,3 +20,14 @@ export const checkDeadline = (year, month, deadline) => {
     let date = deadline.split('-');
     return date[0] == year && date[1] == month;
 }
+
+export const setCalendarTime = ( datestring ) => {
+    const date = datestring.split('-')
+    const d = new Date();
+    d.setFullYear(date[0]);
+    d.setMonth(date[1] - 1);
+    d.setDate(date[2]);
+    d.setHours(date[3]);
+    d.setMinutes(date[4]);
+    return d;
+}

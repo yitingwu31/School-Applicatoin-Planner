@@ -1,5 +1,5 @@
-import { format, subHours, startOfMonth } from 'date-fns';
-import { useState } from 'react';
+import { format, subHours, startOfMonth, getMonth, getYear } from 'date-fns';
+import { useEffect, useState } from 'react';
 import {
   MonthlyBody,
   MonthlyDay,
@@ -9,6 +9,16 @@ import {
 } from '@zach.codes/react-calendar';
 
 import { setCalendarTime } from '../utils';
+import MyMonthlyBody from '../Components/MyMonthlyBody';
+
+const es6 = [
+  { title: 'Walk Dog', date: setCalendarTime("2021-6-26-11-0") },
+  { title: 'Web Meeting ^^', date: setCalendarTime("2021-6-27-11-0") }
+]
+
+const es7 = [
+  { title: 'Doggy ^^', date: setCalendarTime("2021-7-27-11-0") }
+]
 
 const MyMonth = () => {
 
@@ -17,7 +27,17 @@ const MyMonth = () => {
     setCurrentMonth(date);
     console.log("Month change date ", date);
   }
-  const setTime = () => { return }
+  const [year, setYear] = useState(getYear(currentMonth));
+  const [month, setMonth] = useState(getMonth(currentMonth) + 1);
+
+  const [events, setEvents] = useState(es6);
+
+  useEffect(() => {
+    const newyear = getYear(currentMonth);
+    const newmonth = getMonth(currentMonth) + 1;
+    setYear(newyear);
+    setMonth(newmonth);
+  }, [currentMonth]);
 
   return (
     <MonthlyCalendar
@@ -25,12 +45,12 @@ const MyMonth = () => {
       onCurrentMonthChange={date => onMonthChange(date)}
     >
       <MonthlyNav />
-      <MonthlyBody
-        events={[
-          { title: 'Call John', date: subHours(new Date(), 1) },
-          { title: 'Walk Dog', date: new Date() },
-          { title: 'Web Meeting ^^', date: setCalendarTime({ year: 2021, month: 6, date: 27, hour: 11, minute: 0 }) }
-        ]}
+      {/* <MonthlyBody
+        // events={[
+        //   { title: 'Call John', date: subHours(new Date(), 1) },
+        //   { title: 'Walk Dog', date: new Date() }
+        // ]}
+        events = {events}
       >
         <MonthlyDay
           renderDay={data =>
@@ -47,7 +67,8 @@ const MyMonth = () => {
             })
           }
         />
-      </MonthlyBody>
+      </MonthlyBody> */}
+      <MyMonthlyBody year={year} month={month}/>
     </MonthlyCalendar>
   );
 };
