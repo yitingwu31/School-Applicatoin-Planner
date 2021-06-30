@@ -1,11 +1,8 @@
-import { format, subHours, startOfMonth, getMonth, getYear } from 'date-fns';
+import { startOfMonth, getMonth, getYear } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
-  MonthlyBody,
-  MonthlyDay,
   MonthlyCalendar,
-  MonthlyNav,
-  DefaultMonthlyEventItem,
+  MonthlyNav
 } from '@zach.codes/react-calendar';
 
 import { setCalendarTime } from '../utils';
@@ -20,6 +17,8 @@ const es7 = [
   { title: 'Doggy ^^', date: setCalendarTime("2021-7-27-11-0") }
 ]
 
+let user = "emily"
+
 const MyMonth = () => {
 
   let [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
@@ -29,8 +28,6 @@ const MyMonth = () => {
   }
   const [year, setYear] = useState(getYear(currentMonth));
   const [month, setMonth] = useState(getMonth(currentMonth) + 1);
-
-  const [events, setEvents] = useState(es6);
 
   useEffect(() => {
     const newyear = getYear(currentMonth);
@@ -45,30 +42,7 @@ const MyMonth = () => {
       onCurrentMonthChange={date => onMonthChange(date)}
     >
       <MonthlyNav />
-      {/* <MonthlyBody
-        // events={[
-        //   { title: 'Call John', date: subHours(new Date(), 1) },
-        //   { title: 'Walk Dog', date: new Date() }
-        // ]}
-        events = {events}
-      >
-        <MonthlyDay
-          renderDay={data =>
-            data.map((item, index) => {
-              console.log(item.title, item.date);
-              return (
-                <DefaultMonthlyEventItem
-                  key={index}
-                  title={item.title}
-                  // Format the date here to be in the format you prefer
-                  date={format(item.date, 'k:mm')}
-                />
-              )
-            })
-          }
-        />
-      </MonthlyBody> */}
-      <MyMonthlyBody year={year} month={month}/>
+      <MyMonthlyBody user={user} year={year} month={month}/>
     </MonthlyCalendar>
   );
 };

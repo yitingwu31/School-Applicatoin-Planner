@@ -48,9 +48,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SchoolCard({key, name, date, rate}) {
+export default function SchoolCard({key, name, date, todos, rate, user}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+
+  const findMissing = (todos) => {
+    let missing = todos.filter((todo) => todo.completed == false);
+    if (missing.length == 0) {
+      return 'All done!'
+    }
+    let ret = 'Missing: ';
+    for (let i = 0; i < missing.length; i++) {
+      ret = ret.concat(`${missing[i].task}, `);
+    }
+    ret = ret.slice(0, -2)
+    return ret;
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -75,7 +88,7 @@ export default function SchoolCard({key, name, date, rate}) {
             </Grid>
             <Grid item xs={6}>
                 <ProgressBar/>
-                <Typography>Missing: SOP, Letter</Typography>
+                <Typography>{findMissing(todos)}</Typography>
             </Grid>
             <Grid item xs={3}>
                 <Typography variant="subtitle1">Upcoming Date:</Typography>
@@ -95,10 +108,10 @@ export default function SchoolCard({key, name, date, rate}) {
         </IconButton>
       </CardActions>
       
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse in={expanded} timeout="auto">
         <CardContent>
             <h3>To-Do's:</h3>
-          <ToDoList/>
+          <ToDoList todos={todos} user={user}/>
         </CardContent>
       </Collapse>
     </Card>

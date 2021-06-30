@@ -1,4 +1,4 @@
-import { format, subHours, startOfMonth, getMonth, getYear } from 'date-fns';
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { MonthlyBody, MonthlyDay, DefaultMonthlyEventItem } from '@zach.codes/react-calendar';
 import { CALENDARMONTH_QUERY } from '../graphql';
@@ -7,11 +7,11 @@ import { setCalendarTime } from '../utils';
 import { useQuery } from '@apollo/react-hooks';
 import { subscribe } from 'graphql';
 
-const MyMonthlyBody = ({ year, month }) => {
+const MyMonthlyBody = ({ user, year, month }) => {
     const [events, setEvents] = useState([]);
     const { loading, error, data, subscribeToMore } = useQuery(CALENDARMONTH_QUERY, {
         variables: {
-            user: "emily",
+            user: user,
             year: year,
             month: month
         }

@@ -31,10 +31,12 @@ export const USER_SCHOOL_QUERY = gql`
             key
             completed
             todos {
+                key
                 task
                 deadline
                 completed
                 checkpoints {
+                    key
                     content
                     time
                     completed

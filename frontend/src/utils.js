@@ -7,7 +7,7 @@ export const setCalendarTime = ( datestring ) => {
     d.setHours(date[3]);
     d.setMinutes(date[4]);
     return d;
-}
+};
 
 export const convertTimeString = ({ year, month, date, hour, minute }) => {
     const yyyy = toString(year);
@@ -17,4 +17,17 @@ export const convertTimeString = ({ year, month, date, hour, minute }) => {
     const min = minute < 10 ? `0${toString(minute)}` : toString(minute);
     
     return `${yyyy}-${mm}-${dd}-${hh}-${min}`;
-}
+};
+
+export const compareTime = (a, b) => {
+    const date1 = a.split('-');
+    const date2 = b.split('-');
+    if (
+        (date1[0] > date2[0]) ||
+        (date1[0] === date2[0] && date1[1] > date2[1]) ||
+        (date1[0] === date2[0] && date1[1] === date2[1] && date1[2] > date2[2])
+    ) {
+        return 1;
+    }
+    return -1;
+};

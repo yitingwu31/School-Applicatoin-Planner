@@ -2,6 +2,9 @@ import { makeSchoolKey, checkDeadline } from "../utils";
 
 const findUser = async (name, db) => {
     const user = await db.UserModel.findOne({ name });
+    if (!user) {
+        return null;
+    }
     return user
         .populate('schools')
         .populate({ path: 'schools', populate: 'todos' })
@@ -46,6 +49,10 @@ const Query = {
         //     .populate({ path: 'todos', populate: 'checkpoints'})
         //     .execPopulate();
         const student = await findUser(user, db);
+        if (student == null) {
+            console.log("User not found");
+            return [];
+        }
         // console.log(student.schools);
         return student.schools;
     },

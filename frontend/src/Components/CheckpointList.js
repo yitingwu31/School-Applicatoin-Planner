@@ -5,10 +5,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckpointList from './CheckpointList';
 import { useMutation } from '@apollo/client';
-import { COMPLETE_TODO_MUTATION } from '../graphql';
-
+import { COMPLETE_CHECKPOINT_MUTATION } from '../graphql';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,24 +15,25 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#E9EAEC',
     marginLeft: 'auto',
     marginRight: 'auto',
+    color: "brown"
   },
 }));
 
-export default function CheckboxListSecondary({ todos, user }) {
+export default function CheckpointList ({ checkpoints, user }) {
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
 
-  const [completeTodo] = useMutation(COMPLETE_TODO_MUTATION);
+  const [completeCheckpoint] = useMutation(COMPLETE_CHECKPOINT_MUTATION);
 
   useEffect(() => {
     let chk = [];
-    todos.map((todo, idx) => {
-      if (todo.completed == true) {
+    checkpoints.map((check, idx) => {
+      if (check.completed == true) {
         chk.push(idx);
       }
     })
     setChecked(chk);
-  }, [todos]);
+  }, [checkpoints]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -53,37 +52,34 @@ export default function CheckboxListSecondary({ todos, user }) {
   };
 
   const handleCheck = async (index) => {
-    // call mutation
-    // console.log(todos[index]);
-    // console.log(todos[index].key.split('-')[1]);
-    await completeTodo({
-      variables: {
-        user: user,
-        school: todos[index].key.split('-')[1],
-        task: todos[index].task
-      }
+    const chop = checkpoints[index].key.split('-');
+    await completeCheckpoint ({
+        variables: {
+            user: user,
+            school: chop[1],
+            task: chop[2],
+            content: checkpoints[index].content
+        }
     })
   }
 
   return (
     <List dense className={classes.root}>
-      {todos.map((todo, index) => {
+      {checkpoints.map((check, index) => {
         const labelId = `checkbox-list-secondary-label-${index}`;
         return (
-          <div>
           <ListItem key={index} button>
-            <ListItemText id={labelId} primary={todo.task} secondary={todo.deadline}/>
+            <ListItemText id={labelId} primary={`${check.content}`} secondary={check.time}/>
             <ListItemSecondaryAction>
               <Checkbox
                 edge="end"
                 onChange={handleToggle(index)}
                 checked={checked.indexOf(index) !== -1}
                 inputProps={{ 'aria-labelledby': labelId }}
+                color="primary"
               />
             </ListItemSecondaryAction>
           </ListItem>
-          <CheckpointList checkpoints={todo.checkpoints} user={user}/>
-          </div>
         );
       })}
     </List>
