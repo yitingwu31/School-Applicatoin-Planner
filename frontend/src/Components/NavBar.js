@@ -18,7 +18,8 @@ const NavBar = () => {
     }
     // Add School
     const [addOpen, setAddOpen] = useState(false);
-    const [addSchool, setAddSchool] = useState({})
+    // const [editOpen, setEditOpen]=useState(false);
+    // const [addSchool, setAddSchool] = useState({})
     const handleAddOpen = () => {
         setAddOpen(true);
     };
@@ -26,7 +27,7 @@ const NavBar = () => {
         setAddOpen(false);
     };
 
-    
+
 
     return (
         <div>
@@ -41,7 +42,13 @@ const NavBar = () => {
                 <IconButton aria-label="add school" color="primary" onClick={handleAddOpen}>
                     <AddCircleIcon />
                 </IconButton>
-                <AddSchool addSchool={addSchool} handleClose={handleAddClose} open={addOpen} setAddSchool={setAddSchool} />
+                <AddSchool
+                    // addSchool={addSchool}
+                    handleClose={handleAddClose}
+                    open={addOpen}
+                // setAddSchool={setAddSchool}
+                />
+
             </Toolbar>
         </div>
     )

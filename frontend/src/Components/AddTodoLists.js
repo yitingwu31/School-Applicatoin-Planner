@@ -25,60 +25,67 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
         time: defaultDeadline
     }
     const addTodoRef = useRef();
-    
+
     const handleAddTodo = (event) => {
-        let SCHOOL = { ...school }
+        /*
+
+        */
+        let nxtSchool = { ...school }
         let value = ""
         if (event.keyCode === 13) {
             value = addTodoRef.current.value
             let newTodos = [...school.todos]
             newTodos.push(value)
-            SCHOOL.todos = [...newTodos]
-            setSchool(SCHOOL)
+            nxtSchool.todos = [...newTodos]
+            setSchool(nxtSchool)
             addTodoRef.current.value = ""
         }
     }
 
     const handleAddComment = (todo) => (event) => {
-        let SCHOOL = { ...school }
+        /*
+        add one comment in a "todo"
+        */
+        let nxtSchool = { ...school }
         const index = findTodoIndex(todo)
-        SCHOOL.todos[index].comment = event.target.value
-        setSchool(SCHOOL)
+        nxtSchool.todos[index].comment = event.target.value
+        setSchool(nxtSchool)
     }
     const handleAddCheckpoint = (todo, Checkpoint) => (event) => {
+        console.log("handleAddCheckpoint")
         if (event.keyCode === 13) {
-            //console.log("in add checkpoint")
+
             //https://stackoverflow.com/a/63724115
             const td = { ...todo }
             const index = findTodoIndex(td)
             const cpindex = findCheckpointIndex(td, event.target.value)
-            //console.log("index, cpindex:", index, cpindex)
+            console.log("index, cpindex:", index, cpindex)
             const existing = (x) => {
                 if (x === -1) return false
                 else return true
             }
-            let SCHOOL = { ...school }
-            //const SCHOOLTODOS = [...school.todos]
-            let TODO = { ...SCHOOL.todos[index] }
+            let nxtSchool = { ...school }
+            //const nxtSchoolTODOS = [...school.todos]
+            let TODO = { ...nxtSchool.todos[index] }
 
-            let CHECKPOINTS = [...SCHOOL.todos[index].checkpoints] //關鍵array deep copy!!
+            let CHECKPOINTS = [...nxtSchool.todos[index].checkpoints] //關鍵array deep copy!!
             let CHECKPOINT = { ...Checkpoint }//checkpoint template
             if (!existing(cpindex)) {
                 //console.log("checkpoint doesn't exitst")
                 CHECKPOINT.content = event.target.value
                 CHECKPOINT.time = TODO.deadline
                 CHECKPOINTS.push(CHECKPOINT)
-                //console.log(index)
-                SCHOOL.todos[index].checkpoints = CHECKPOINTS
+                nxtSchool.todos[index].checkpoints = CHECKPOINTS
 
             } else {
                 //console.log("checkpoint exist")
 
                 return
             }
-            // console.log("school", SCHOOL)
-            // console.log("leave add checkpoint")
-            setSchool(SCHOOL)
+            console.log("CHECKPOINTS", CHECKPOINTS)
+            console.log("nxtSchool in addcheckpoint:", nxtSchool)
+            
+            setSchool(nxtSchool)
             event.target.value = ""
             return
         }
@@ -164,7 +171,10 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
                             </Grid>
 
                             <Grid item xs={4}>
-                                <DatePicker todo={todo} handleSetTodo={handleSetTodo}
+                                <DatePicker 
+                                    todo={todo} 
+                                    handleSetTodo={handleSetTodo}
+                                    school={school}
                                     type="todo"
                                     pickerlable={`deadline ${index}`} />
                             </Grid>
@@ -199,6 +209,7 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
                                                 <ListItemText primary={content} />
                                                 <DatePicker
                                                     todo={todo}
+                                                    school={school}
                                                     handleSetTodo={handleSetTodo}
                                                     type="checkpoint"
                                                     num={findCheckpointIndex(todo, content)}

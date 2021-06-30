@@ -27,14 +27,8 @@ export default function DatePicker({
 
     //const [selectedDate, setSelectedDate] = React.useState(new Date());
     const [selectedDate, setSelectedDate] = React.useState(dldate);
-
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-        if (type === "school") handleSchoolDeadline(date)
-        if (type === "todo") handleTodoDeadline(date)
-        if (type === "checkpoint") handleCheckpointDeadline(date)
-    };
     const handleSchoolDeadline = (date) => {
+        console.log('in handleSchoolDeadline')
         SCHOOL.deadline = date
         setSchool(SCHOOL)
     }
@@ -45,7 +39,8 @@ export default function DatePicker({
     }
 
     const handleCheckpointDeadline = (date) => {
-
+        console.log("in datepicker.handleCheckpointDeadline")
+        console.log("num", num)
         let CHECKPOINTS = [...TODO.checkpoints]
         let CHECKPOINT = { ...TODO.checkpoints[num] }
         CHECKPOINT.time = date
@@ -71,9 +66,20 @@ export default function DatePicker({
             comment: newComment,
             checkpoints: newCHPS,
         }
-
+        // console.log("newCHPS",newCHPS)
+        // console.log("newTODO",newTODO)
+        // console.log('call handle set todo in datepicker.handleCheckpointDeadline.')
         handleSetTodo(newTODO)
+        // console.log('end handle set todo in datepicker.handleCheckpointDeadline.')
+        // console.log("s", school)
     }
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        if (type === "school") handleSchoolDeadline(date)
+        if (type === "todo") handleTodoDeadline(date)
+        if (type === "checkpoint") handleCheckpointDeadline(date)
+    };
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

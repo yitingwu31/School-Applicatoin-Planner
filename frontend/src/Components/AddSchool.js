@@ -74,7 +74,10 @@ const DialogActions = withStyles((theme) => ({
     },
 }))(MuiDialogActions);
 
-export default function CustomizedDialogs({ open, handleClose, setAddSchool, addSchool }) {
+
+/*********************************************************************** */
+
+export default function CustomizedDialogs({ open, handleClose }) {
     const classes = useStyles();
     const School_todos = [
         "Program Research", "Register", "Application Form",
@@ -94,14 +97,14 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
     };
 
     const initSchool = (School_todos, Todo, School) => {
-        let SCHOOL = { ...School }
+        let nxtSchool = { ...School }
         //https://kanboo.github.io/2018/01/27/JS-ShallowCopy-DeepCopy/
         for (let i = 0; i < School_todos.length; i++) {
-            let TODO = { ...Todo }
-            TODO.task = School_todos[i]
-            SCHOOL.todos[i] = TODO
+            let nxtTodo = { ...Todo }
+            nxtTodo.task = School_todos[i]
+            nxtSchool.todos[i] = nxtTodo
         }
-        return SCHOOL
+        return nxtSchool
     }
 
     const _School = initSchool(School_todos, Todo, School)
@@ -116,8 +119,8 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
     // if(SchoolError) console.log("SchoolError",JSON.stringify(SchoolError, null, 2))
     // if (TodoLoading) console.log("TodoLoading")
     // if(TodoError) console.log("TodoError",TodoError)
-    // if (CheckpointLoading) console.log("CheckpointLoading")
-    // if(CheckpointError) console.log("CheckpointError",CheckpointError)
+    if (CheckpointLoading) console.log("CheckpointLoading")
+    if(CheckpointError) console.log("CheckpointError",CheckpointError)
 
     const handleMutation = async (addSchool) => {
         const owner = "Emily" //modify later
@@ -161,58 +164,80 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
 
     const findTodoIndex = (todo) => {
         const Todotask = todo.task
-        const ans = school.todos.findIndex((TODO) => {
-            return TODO.task === Todotask
+        const ans = school.todos.findIndex((nxtTodo) => {
+            return nxtTodo.task === Todotask
         })
         return ans
     }
     const findCheckpointIndex = (todo, content) => {
         //console.log("in find checkpointindex")
-        const TODOindex = findTodoIndex(todo)
-        const TODO = school.todos[TODOindex]
-        //console.log(TODO)
+        const nxtTodoindex = findTodoIndex(todo)
+        const nxtTodo = school.todos[nxtTodoindex]
+        //console.log(nxtTodo)
         //console.log(content)
-        return TODO.checkpoints.findIndex((item) => item.content === content)
+        return nxtTodo.checkpoints.findIndex((item) => item.content === content)
     }
     const handleSetTodo = (todo) => {
-        let SCHOOL = { ...school }
+        /*
+        after modify each "todo" in school (add new "todo"
+         won't call this) in form e.g. change date
+        */
+        let nxtSchool = { ...school }
         //find and replace
         const index = findTodoIndex(todo)
-        SCHOOL.todos[index] = todo
-        //console.log("handleSetTodo: ", index, SCHOOL)
-        setSchool(SCHOOL)
+        nxtSchool.todos[index] = todo
+        // console.log("handleSetTodo nxtschool: ", index, nxtSchool)
+        setSchool(nxtSchool)
+        // the school state is correct for sure.
+        console.log("school in handlesettodo:", school)
     }
 
     const handleAddSchool = () => {
+        /*
+        only work after click "ok" button.
+        immediatly output data.
+        */
         //finalize AddSchool data output
-        let AddSchool = { ...school }
+        // console.log("handleaddSchool")
 
-        const SCHOOLTODOS = [...school.todos]
-        let AddSchoolTODOS = []
-        for (let i = 0; i < SCHOOLTODOS.length; i++) {
-            if (checked.includes(SCHOOLTODOS[i].task)) {
-                AddSchoolTODOS.push(SCHOOLTODOS[i])
+        // addSchool is the school object prepaired upload to backend.
+        let addSchool = { ...school }
+        console.log("school in handleAddSchool", school)
+        const nxtSchoolnxtTodoS = [...school.todos]
+        let addSchoolNxtTodoS = []
+        // filter checked todo
+        for (let i = 0; i < nxtSchoolnxtTodoS.length; i++) {
+            if (checked.includes(nxtSchoolnxtTodoS[i].task)) {
+                addSchoolNxtTodoS.push(nxtSchoolnxtTodoS[i])
 
             }
         }
         //format date
-        AddSchool.deadline = Time2String(AddSchool.deadline)
-        AddSchoolTODOS.map((todo) => {
-            todo.checkpoints.map((checkpoint) => {
-                return checkpoint.time = Time2String(checkpoint)
+        addSchool.deadline = Time2String(addSchool.deadline)
+        addSchoolNxtTodoS.map((todo) => {
+            // todo.checkpoints.map((checkpoint) => {
+            //     return checkpoint.time = Time2String(checkpoint.time)
+            // })
+            todo.checkpoints= todo.checkpoints.map((checkpoint) => {
+                checkpoint.time = Time2String(checkpoint.time)
+                return checkpoint
             })
             return todo.deadline = Time2String(todo.deadline)
         })
 
-        AddSchool.name = schoolNameRef.current.value
-        AddSchool.todos = AddSchoolTODOS
+        addSchool.name = schoolNameRef.current.value
+        addSchool.todos = addSchoolNxtTodoS
+        console.log("nxt addSchool prototype: ", addSchool)
+        handleMutation(addSchool)
+        // setSchool(addSchool);
 
-
-
-        console.log("AddSchool: ", AddSchool)
-        handleMutation(AddSchool)
-        setAddSchool(AddSchool);
         handleClose();
+    }
+    const hOkBtnOnClick=() => {
+        // problem here.
+        console.log("click", school)
+        handleAddSchool()
+        handleClose()
     }
 
     return (
@@ -248,7 +273,9 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
                     </div>
 
                     <Grid item>
+                        {/* {console.log("rdr school",school)} */}
                         <AddTodoLists
+
                             todos={school.todos}
                             school={school}
                             setSchool={setSchool}
@@ -262,11 +289,10 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
                         />
                     </Grid>
                 </DialogContent>
+                {console.log("rdr c_addschool:", school)}
                 <DialogActions>
-                    <Button autoFocus onClick={() => {
-                        handleClose()
-                        handleAddSchool()
-                    }} color="primary" >
+                    <Button autoFocus onClick={hOkBtnOnClick}
+                        color="primary" >
                         OK
                     </Button>
                 </DialogActions>
