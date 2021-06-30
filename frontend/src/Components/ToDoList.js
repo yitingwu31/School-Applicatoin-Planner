@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CheckboxListSecondary({ todos, user }) {
+export default function CheckboxListSecondary({ todos, user, fakeCheck }) {
   const classes = useStyles();
   const [checked, setChecked] = useState([]);
 
@@ -60,7 +60,8 @@ export default function CheckboxListSecondary({ todos, user }) {
         school: todos[index].key.split('-')[1],
         task: todos[index].task
       }
-    })
+    });
+    fakeCheck(todos[index].task);
   }
 
   return (
@@ -77,6 +78,7 @@ export default function CheckboxListSecondary({ todos, user }) {
                 onChange={handleToggle(index)}
                 checked={checked.indexOf(index) !== -1}
                 inputProps={{ 'aria-labelledby': labelId }}
+                color="primary"
               />
             </ListItemSecondaryAction>
           </ListItem>

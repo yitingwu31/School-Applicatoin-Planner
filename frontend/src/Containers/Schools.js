@@ -96,6 +96,7 @@ const Schools = () => {
     if (loading) console.log("Loading...");
     if (error) console.log("Error: ", error);
     if (!loading && !error) {
+      console.log("School query done!");
       const schoolList = data.userSchool;
       let sortedSchools = schoolList.slice();
       sortedSchools.sort((a, b) => compareTime(a, b));

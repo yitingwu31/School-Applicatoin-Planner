@@ -77,7 +77,6 @@ export default function CheckpointList ({ checkpoints, user }) {
                 onChange={handleToggle(index)}
                 checked={checked.indexOf(index) !== -1}
                 inputProps={{ 'aria-labelledby': labelId }}
-                color="primary"
               />
             </ListItemSecondaryAction>
           </ListItem>

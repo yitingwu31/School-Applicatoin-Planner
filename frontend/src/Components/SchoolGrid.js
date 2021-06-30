@@ -56,6 +56,8 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
   const [expanded, setExpanded] = React.useState(false);
 
   const [missing, setMissing] = useState();
+  const [allNum, setAllNum] = useState(0);
+  const [doneNum, setDoneNum] = useState(0);
   const [percent, setPercent] = useState(0);
   const [completeSchool] = useMutation(COMPLETE_SCHOOL_MUTATION);
 
@@ -79,9 +81,10 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
 
   const findMissing = (todos) => {
     let missing = todos.filter((todo) => todo.completed === false);
+    setAllNum(todos.length);
+    setDoneNum(todos.length - missing.length);
     const per = Math.round((todos.length - missing.length) / todos.length * 100);
     setPercent(per);
-    console.log(name, per);
     if (missing.length === 0) {
       return 'All done!'
     }
@@ -91,6 +94,28 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
     }
     ret = ret.slice(0, -2)
     return ret;
+  }
+
+  const fakeCheck = (task) => {
+    let arr = missing.split(': ').join(', ').split(', ');
+    // console.log(arr);
+    let ret = 'Missing: ';
+    for (let i = 1; i < arr.length; i++) {
+      if (arr[i] !== task) {
+        ret = ret.concat(`${arr[i]}, `);
+      }
+    }
+    ret = ret.slice(0,-2);
+    if (ret === "Missing") {
+      ret = "All done!";
+    }
+    setMissing(ret);
+    const olddone = doneNum;
+    setDoneNum(olddone + 1);
+    console.log(olddone, allNum);
+    let kk = Math.round((olddone + 1) / allNum * 100);
+    console.log(kk);
+    setPercent(Math.round((olddone + 1) / allNum * 100));
   }
 
   const handleExpandClick = () => {
@@ -139,7 +164,7 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
       <Collapse in={expanded} timeout="auto">
         <CardContent>
             <h3>To-Do's:</h3>
-          <ToDoList todos={todos} user={user}/>
+          <ToDoList todos={todos} user={user} fakeCheck={fakeCheck}/>
         </CardContent>
       </Collapse>
     </Card>
