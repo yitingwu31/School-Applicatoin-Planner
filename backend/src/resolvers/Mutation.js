@@ -11,7 +11,6 @@ const checkUser = async (db, name) => {
         .execPopulate();
 }
 
-
 const Mutation = {
     async createUser(parent, { name }, { db }, info) {
         let user = await db.UserModel.findOne({ name });
@@ -24,12 +23,17 @@ const Mutation = {
 
     async createSchool(parent, { data }, { db }, info) {
         const { owner, name, deadline } = data;
-        // owner: username, name: school name
         let user = await checkUser(db, owner);
         const key = makeSchoolKey(owner, name);
-        let newschool = await new db.SchoolModel({ key, name, deadline, completed: false }).save();
-        user.schools.push(newschool);
-        await user.save();
+        let newschool = await db.SchoolModel.findOne({ key });
+        if (!newschool) {
+            newschool = await new db.SchoolModel({ key, name, deadline, completed: false }).save();
+            user.schools.push(newschool);
+            await user.save();
+        } else {
+            newschool.deadline = deadline;
+            await newschool.save();
+        }
         return newschool;
     },
 
@@ -55,8 +59,15 @@ const Mutation = {
         await Promise.all(
             data.map(async (todo) => {
                 const { task, deadline, comment } = todo;
-                let newtodo = await new db.TodoModel({ key, task, deadline, comment, completed: false }).save();
-                newtodolist.push(newtodo);
+                let newtodo = await db.TodoModel.findOne({ key, task });
+                if (!newtodo) {
+                    newtodo = await new db.TodoModel({ key, task, deadline, comment, completed: false }).save();
+                    newtodolist.push(newtodo);
+                } else {
+                    newtodo.deadline = deadline;
+                    newtodo.comment = comment;
+                    await newtodo.save();
+                }
             })
         ).catch ((e) => console.log(e));
         // console.log(newtodolist);
@@ -109,8 +120,14 @@ const Mutation = {
         await Promise.all(
             data.map(async (checkpoint) => {
                 const { content, time } = checkpoint;
-                let newcheckpoint = await new db.CheckpointModel({ key, content, time, completed: false }).save();
-                newcheckpointlist.push(newcheckpoint);
+                let newcheckpoint = await db.CheckpointModel.findOne({ key, content });
+                if (!newcheckpoint) {
+                    newcheckpoint = await new db.CheckpointModel({ key, content, time, completed: false }).save();
+                    newcheckpointlist.push(newcheckpoint);
+                } else {
+                    newcheckpoint.time = time;
+                    await newcheckpoint.save();
+                }
             })
         ).catch ((e) => console.log(e));
         todo.checkpoints.push(...newcheckpointlist);
