@@ -114,11 +114,28 @@ const Schools = () => {
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
           const newSchool = subscriptionData.data.school.data;
-          setSchools([newSchool, ...prev.userSchool]);
+          let newlist = [];
+          let same = false;
+          for (let i = 0; i < prev.userSchool.length; i++) {
+            if (prev.userSchool[i].name === newSchool.name) {
+              newlist.push(newSchool);
+              same = true;
+            } else {
+              newlist.push(prev.userSchool[i]);
+            }
+          }
+          
+          if (same) {
+            setSchools([...newlist]);
+          } else {
+            newlist = [newSchool, ...prev.userSchool];
+            setSchools([...newlist]);
+          }
+          
           
           return {
             ...prev,
-            schools: [newSchool, ...prev.userSchool],
+            schools: [...newlist],
           }
         }
       })
