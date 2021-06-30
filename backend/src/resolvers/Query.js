@@ -1,4 +1,4 @@
-import { makeSchoolKey, checkDeadline } from "../utils";
+import { missingDisplay, checkDeadline } from "../utils";
 
 const findUser = async (name, db) => {
     const user = await db.UserModel.findOne({ name });
@@ -42,18 +42,11 @@ const Query = {
     },
 
     async userSchool(parent, { user }, { db }, info) {
-        // const key = makeSchoolKey(user, school);
-        // const findschool = await db.SchoolModel.findOne({ key });
-        // return findschool
-        //     .populate('todos')
-        //     .populate({ path: 'todos', populate: 'checkpoints'})
-        //     .execPopulate();
         const student = await findUser(user, db);
         if (student == null) {
             console.log("User not found");
             return [];
         }
-        // console.log(student.schools);
         return student.schools;
     },
 
@@ -72,13 +65,13 @@ const Query = {
         todos.map((todo) => {
             if (checkDeadline(year, month, todo.deadline)) {
                 let s = todo.key.split('-');
-                ret.push({ type: 'todo', context: `${s[1]} ${todo.task}`, deadline: todo.deadline, completed: todo.completed });
+                ret.push({ type: 'todo', context: `${s[1]} ${missingDisplay(todo.task)}`, deadline: todo.deadline, completed: todo.completed });
             }
         })
         checkpoints.map((check) => {
             if (checkDeadline(year, month, check.time)) {
                 let s = check.key.split('-');
-                ret.push({ type: 'checkpoint', context: `${s[1]} ${s[2]} ${check.content}`, deadline: check.time, completed: check.completed });
+                ret.push({ type: 'checkpoint', context: `${s[1]} ${missingDisplay(s[2])} ${check.content}`, deadline: check.time, completed: check.completed });
             }
         })
         return ret;

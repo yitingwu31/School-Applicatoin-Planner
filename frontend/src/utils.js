@@ -46,3 +46,13 @@ export const dateDisplay = (datestring) => {
     const date = datestring.split('-');
     return `${date[0]}/${date[1]}/${date[2]}`
 }
+
+
+export const missingDisplay = (longstring) => {
+    if (longstring === "Program Research") return "Program Search"
+    if (longstring === "Application Form") return "App";
+    if (longstring === "SOP(Statement of Purpose)") return "SOP";
+    if (longstring === "PS(Personal Statement)") return "PS";
+    if (longstring === "CV/Resume") return "CV";
+    else return longstring;
+}

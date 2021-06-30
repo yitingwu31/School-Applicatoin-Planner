@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { MonthlyBody, MonthlyDay } from '@zach.codes/react-calendar';
 import { CALENDARMONTH_QUERY } from '../graphql';
