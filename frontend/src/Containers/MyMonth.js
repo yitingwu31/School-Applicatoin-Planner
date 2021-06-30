@@ -6,6 +6,7 @@ import {
 } from '@zach.codes/react-calendar';
 
 import MyMonthlyBody from '../Components/MyMonthlyBody';
+import MyMonthNav from '../Components/MyMonthNav';
 
 let user = "emily"
 
@@ -30,7 +31,8 @@ const MyMonth = () => {
       currentMonth={currentMonth}
       onCurrentMonthChange={date => onMonthChange(date)}
     >
-      <MonthlyNav />
+      {/* <MonthlyNav /> */}
+      <MyMonthNav />
       <MyMonthlyBody user={user} year={year} month={month}/>
     </MonthlyCalendar>
   );

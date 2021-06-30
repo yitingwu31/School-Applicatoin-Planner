@@ -14,13 +14,14 @@ const MyMonthlyBody = ({ user, year, month }) => {
             year: year,
             month: month
         },
-        fetchPolicy: "cache-and-network"
+        fetchPolicy: "network-only"
     });
 
     useEffect(() => {
         if (loading) console.log("Loading...");
         if (error) console.log("Error: ", error);
         if (!loading && !error) {
+            console.log("calendar query done!");
             const tasklist = data.allByDate;
             let newEvents = [];
             tasklist.map((row) => {
