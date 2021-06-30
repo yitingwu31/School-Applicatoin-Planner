@@ -18,11 +18,6 @@ type Query {
     allByDate(user: String!, year: Int!, month: Int!): [TaskNote]!
 }
 
-type Subscription {
-    todo(user: String!): TodoSubscriptionPayload!
-    checkpoint(user: String!): CheckpointSubscriptionPayload!
-}
-
 input CreateSchoolInput {
     owner: String!
     name: String!

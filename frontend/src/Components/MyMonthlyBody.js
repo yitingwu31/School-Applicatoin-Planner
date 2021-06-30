@@ -22,12 +22,14 @@ const MyMonthlyBody = ({ user, year, month }) => {
         if (loading) console.log("Loading...");
         if (error) console.log("Error: ", error);
         if (!loading && !error) {
+            console.log("calendar query done!")
             const tasklist = data.allByDate;
             let newEvents = [];
             tasklist.map((row) => {
                 newEvents.push({ title: row.context, date: setCalendarTime(row.deadline), completed: row.completed })
             })
             setEvents(newEvents);
+            console.log("newEvents: ", newEvents);
         }
     }, [data])
     
