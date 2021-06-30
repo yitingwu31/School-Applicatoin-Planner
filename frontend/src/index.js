@@ -7,22 +7,18 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
+  HttpLink,
 } from "@apollo/client";
+
+import { split } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
+
 
 const client = new ApolloClient({
   uri: 'https://localhost:5000',
   cache: new InMemoryCache()
 });
-
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  HttpLink,
-} from '@apollo/client';
-import { split } from 'apollo-link';
-import { WebSocketLink } from 'apollo-link-ws';
-import { getMainDefinition } from 'apollo-utilities';
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:5000/',
@@ -48,11 +44,6 @@ const link = split(
   wsLink,
   httpLink,
 );
-
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache().restore({}),
-});
 
 ReactDOM.render(
   <React.StrictMode>

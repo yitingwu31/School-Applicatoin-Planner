@@ -1,3 +1,4 @@
+import moment from 'moment'
 export const setCalendarTime = ( datestring ) => {
     const date = datestring.split('-')
     const d = new Date();
@@ -17,4 +18,8 @@ export const convertTimeString = ({ year, month, date, hour, minute }) => {
     const min = minute < 10 ? `0${toString(minute)}` : toString(minute);
     
     return `${yyyy}-${mm}-${dd}-${hh}-${min}`;
+}
+
+export const Time2String =(date)=>{
+    return moment(date).format("YYYY-MM-DD")
 }

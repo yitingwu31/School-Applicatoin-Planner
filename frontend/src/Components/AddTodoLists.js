@@ -16,6 +16,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CommentIcon from '@material-ui/icons/Comment';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
+
 export default function AddTodoLists({ todos, school, setSchool, checked, setChecked,
     classes, findTodoIndex, findCheckpointIndex, defaultDeadline, handleSetTodo }) {
 
@@ -24,6 +25,7 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
         time: defaultDeadline
     }
     const addTodoRef = useRef();
+    
     const handleAddTodo = (event) => {
         let SCHOOL = { ...school }
         let value = ""
@@ -43,7 +45,6 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
         SCHOOL.todos[index].comment = event.target.value
         setSchool(SCHOOL)
     }
-
     const handleAddCheckpoint = (todo, Checkpoint) => (event) => {
         if (event.keyCode === 13) {
             //console.log("in add checkpoint")
@@ -106,16 +107,12 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
     function not(a, b) {
         return a.filter((value) => b.indexOf(value) === -1);
     }
-
     function intersection(a, b) {
         return a.filter((value) => b.indexOf(value) !== -1);
     }
-
     function union(a, b) {
         return [...a, ...not(b, a)];
     }
-
-
     const items = todos.map((todo) => {
         return todo.task
     })

@@ -39,7 +39,7 @@ const NavBar = () => {
                 <IconButton aria-label="add school" color="primary" onClick={handleAddOpen}>
                     <AddCircleIcon />
                 </IconButton>
-                <AddSchool handleClose={handleAddClose} open={addOpen} setAddSchool={setAddSchool} />
+                <AddSchool addSchool={addSchool} handleClose={handleAddClose} open={addOpen} setAddSchool={setAddSchool} />
             </Toolbar>
         </div>
     )

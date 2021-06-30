@@ -10,12 +10,11 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import { setCalendarTime, convertTimeString } from '../utils'
-
 import SchoolIcon from '@material-ui/icons/School';
 import CloseIcon from '@material-ui/icons/Close';
-
-
-
+import { CREATE_USER_MUTATION, CREATE_SCHOOL_MUTATION, CREATE_TODO_MUTATION, CREATE_CHECKPOINT_MUTATION } from '../graphql';
+import { useMutation } from '@apollo/client';
+import { Time2String } from '../utils'
 const useStyles = makeStyles((theme) => ({
     margin: {
         margin: theme.spacing(1),
@@ -75,7 +74,7 @@ const DialogActions = withStyles((theme) => ({
     },
 }))(MuiDialogActions);
 
-export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
+export default function CustomizedDialogs({ open, handleClose, setAddSchool, addSchool }) {
     const classes = useStyles();
     const School_todos = [
         "Program Research", "Register", "Application Form",
@@ -108,8 +107,57 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
     const _School = initSchool(School_todos, Todo, School)
     const [checked, setChecked] = useState([]);
     const [school, setSchool] = useState(_School)
-
     const schoolNameRef = useRef();
+    const [createSchool, { schooldata }] = useMutation(CREATE_SCHOOL_MUTATION)
+    const [createTodo, { tododata }] = useMutation(CREATE_TODO_MUTATION)
+    const [createCheckpoint, { checkpointdata }] = useMutation(CREATE_CHECKPOINT_MUTATION)
+
+
+    const handleMutation = () => {
+        const owner = "Emily" //modify later
+        createSchool({
+            variables: {
+                owner: owner,
+                name: addSchool.name,
+                deadline: addSchool.deadline
+
+            }
+        })
+        for (let i = 0; i < addSchool.todos.length; i++) {
+            let addTodo = { ...addSchool.todos[i] }
+            createTodo({
+                variables: {
+                    owner: owner,
+                    school: addSchool.name,
+                    task: addTodo.task,
+                    name: addSchool.name,
+                    deadline: addTodo.deadline,
+                    comment: addTodo.comment
+                }
+            })
+            for (let j = 0; i < addTodo.checkpoints.length; i++) {
+                let addCheckpoint = { ...addTodo.checkpoints[j] }
+                createCheckpoint({
+                    variables: {
+                        owner: owner,
+                        school: addSchool.name,
+                        task: addTodo.task,
+                        content: addCheckpoint.content,
+                        time: addCheckpoint.time
+                    }
+                })
+            }
+        }
+
+        createCheckpoint({
+            variables: {
+                owner: owner,
+                name: addSchool.name,
+                deadline: addSchool.deadline
+            }
+        })
+
+    }
 
     const findTodoIndex = (todo) => {
         const Todotask = todo.task
@@ -136,14 +184,26 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
     }
 
     const handleAddSchool = () => {
+        //finalize AddSchool data output
         let AddSchool = { ...school }
+
         const SCHOOLTODOS = [...school.todos]
         let AddSchoolTODOS = []
         for (let i = 0; i < SCHOOLTODOS.length; i++) {
             if (checked.includes(SCHOOLTODOS[i].task)) {
                 AddSchoolTODOS.push(SCHOOLTODOS[i])
+
             }
         }
+        //format date
+        AddSchool.deadline = Time2String(AddSchool.deadline)
+        AddSchoolTODOS.map((todo) => {
+            todo.checkpoints.map((checkpoint) => {
+                return checkpoint.time = Time2String(checkpoint)
+            })
+            return todo.deadline = Time2String(todo.deadline)
+        })
+
         AddSchool.name = schoolNameRef.current.value
         AddSchool.todos = AddSchoolTODOS
         console.log("AddSchool: ", AddSchool)
@@ -170,14 +230,14 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                                 />
                             </Grid>
                             <Grid item >
-                                <DatePicker 
-                                todo={Todo} 
-                                school={school}
-                                handleSetTodo={handleSetTodo} 
-                                setSchool={setSchool}
-                                defaultDeadline={defaultDeadline}
-                                type={"school"} num="NAN" 
-                                pickerlable={`deadline #`} />
+                                <DatePicker
+                                    todo={Todo}
+                                    school={school}
+                                    handleSetTodo={handleSetTodo}
+                                    setSchool={setSchool}
+                                    defaultDeadline={defaultDeadline}
+                                    type={"school"} num="NAN"
+                                    pickerlable={`deadline #`} />
                             </Grid>
 
                         </Grid>
@@ -202,6 +262,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool }) {
                     <Button autoFocus onClick={() => {
                         handleClose()
                         handleAddSchool()
+                        handleMutation()
                     }} color="primary" >
                         OK
                     </Button>

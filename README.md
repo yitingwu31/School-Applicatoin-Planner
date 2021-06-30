@@ -60,3 +60,8 @@
 - Backend add update and complete tasks mutations, subscriptions
 - Frontend calendar view query done
 - TBD: Frontend subscription, schoolcards view and update tasks
+
+### 6/30 慈
+- use [moment.js](https://momentjs.com/) (./frontend/src/utlils.js) to format Date
+- `cd frontend` && `yarn add moment`
+- Frontend Mutation
