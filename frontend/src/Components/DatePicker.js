@@ -8,45 +8,49 @@ import {
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-export default function DatePicker({ todo, handleSetTodo, type, num, pickerlable }) {
-    // The first commit of Material-UI
+export default function DatePicker({
+    todo, school, handleSetTodo, setSchool,
+    type, num, pickerlable, defaultDeadline }) {
+
     const ID = pickerlable.toLowerCase().split(' ').join('-')
     let Lable = pickerlable.split(" ")
     let rm = Lable.splice(-1, 1)
     Lable = Lable.join(" ")
 
     let TODO = { ...todo }
-    
+    let SCHOOL = { ...school }
     let dldate = ""
+    if (type === "school") { dldate = defaultDeadline }
     if (type === "todo") { dldate = TODO.deadline }
-    if (type === "checkpoint") { dldate = TODO.checkpoints[num].deadline }
+    if (type === "checkpoint") { dldate = TODO.checkpoints[num].time }
 
 
     //const [selectedDate, setSelectedDate] = React.useState(new Date());
     const [selectedDate, setSelectedDate] = React.useState(dldate);
+
     const handleDateChange = (date) => {
         setSelectedDate(date);
-
-        if (type === "todo") {
-            handleTodoDeadline(date)
-        }
-        if (type === "checkpoint") {
-            handleCheckpointDeadline(date)
-        }
+        if (type === "school") handleSchoolDeadline(date)
+        if (type === "todo") handleTodoDeadline(date)
+        if (type === "checkpoint") handleCheckpointDeadline(date)
     };
+    const handleSchoolDeadline = (date) => {
+        SCHOOL.deadline = date
+        setSchool(SCHOOL)
+    }
 
     const handleTodoDeadline = (date) => {
         TODO.deadline = date
-        handleSetTodo(TODO)//it works
+        handleSetTodo(TODO)
     }
 
     const handleCheckpointDeadline = (date) => {
-        //console.log("datepicker TODO:",TODO)
+
         let CHECKPOINTS = [...TODO.checkpoints]
         let CHECKPOINT = { ...TODO.checkpoints[num] }
-        CHECKPOINT.deadline = date //ok
+        CHECKPOINT.time = date
         const newCP = { ...CHECKPOINT }
-        let newCHPS = []//ok
+        let newCHPS = []
         for (let i = 0; i < CHECKPOINTS.length; i++) {
             let c = {}
             if (i === num) {
@@ -58,24 +62,16 @@ export default function DatePicker({ todo, handleSetTodo, type, num, pickerlable
             newCHPS.push(c)
         }
 
-        //CHECKPOINTS = [{ ...CHECKPOINTS[num] }] //without this line the answer is correct
-        //TODO.checkpoints = [...CHECKPOINTS] //not ok
-        // const newName = TODO.newName
-        const newName = TODO.name
+        const newTask = TODO.task
         const newDeadline = TODO.deadline
         const newComment = TODO.comment
         const newTODO = {
-            name: newName,
+            task: newTask,
             deadline: newDeadline,
             comment: newComment,
             checkpoints: newCHPS,
         }
-        // console.log(newName)
-        //CHECKPOINTS[num] is correct, CHECKPOINTS&TODO is wrong
-        //console.log("1", newTODO.checkpoints[num].deadline)//sometimes correct
-        // console.log("2", CHECKPOINT)//correct
-        // console.log("3", newCHPS)//correct
-        // console.log("4", newTODO)//correct
+
         handleSetTodo(newTODO)
     }
 
