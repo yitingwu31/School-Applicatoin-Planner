@@ -9,6 +9,7 @@ const findUser = async (name, db) => {
         .execPopulate();
 }
 
+// in a month
 const findTodo = async (user, year, month, db) => {
     let allTodos = await db.TodoModel.find().populate('checkpoints');
     let findtodos = allTodos.filter((todo) => {
@@ -20,6 +21,7 @@ const findTodo = async (user, year, month, db) => {
     return findtodos;
 }
 
+// in a month
 const findCheckpoint = async (user, year, month, db) => {
     let allCheckpoints = await db.CheckpointModel.find();
     let findcheckpoints = allCheckpoints.filter((check) => {
