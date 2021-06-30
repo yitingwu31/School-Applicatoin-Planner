@@ -3,14 +3,23 @@ type Mutation {
     createSchool(data: CreateSchoolInput!): School!
     createTodo(owner: String!, school: String!, data: [CreateTodoInput]): [Todo]!
     createCheckpoint(owner: String!, school: String!, task: String!, data: [CreateCheckpointInput]): [Checkpoint]!
+    updateTodo(user: String!, school: String!, task: String!, date: String!): Boolean!
+    completeTodo(user: String!, school: String!, task: String!): Boolean!
+    updateCheckpoint(user: String!, school: String!, task: String!, content: String!, date: String!): Boolean!
+    completeCheckpoint(user: String!, school: String!, task: String!, content: String!): Boolean!
 }
 
 type Query {
     user(name: String!): User
-    userSchool(user: String!, school: String!): School!
+    userSchool(user: String!): [School!]!
     userMonthTodo(user: String!, year: Int!, month: Int!): [Todo]!
     userMonthCheckpoint(user: String!, year: Int!, month: Int!): [Checkpoint]!
     allByDate(user: String!, year: Int!, month: Int!): [TaskNote]!
+}
+
+type Subscription {
+    todo(user: String!): TodoSubscriptionPayload!
+    checkpoint(user: String!): CheckpointSubscriptionPayload!
 }
 
 input CreateSchoolInput {
@@ -34,6 +43,7 @@ type TaskNote {
     type: String!
     context: String!
     deadline: String!
+    completed: Boolean!
 }
 
 type Checkpoint {
@@ -41,6 +51,7 @@ type Checkpoint {
     key: String!
     content: String!
     time: String!
+    completed: Boolean!
 }
 
 type Todo {
@@ -50,6 +61,7 @@ type Todo {
     deadline: String!
     comment: String
     checkpoints: [Checkpoint!]
+    completed: Boolean!
 }
 
 type School {
@@ -58,10 +70,27 @@ type School {
     name: String!
     deadline: String!
     todos: [Todo!]
+    completed: Boolean!
 }
 
 type User {
     id: ID!
     name: String!
     schools: [School!]
+}
+
+enum MutationType {
+    CREATED
+    UPDATED
+    COMPLETED
+}
+
+type TodoSubscriptionPayload {
+    mutation: MutationType!
+    data: [Todo!]!
+}
+
+type CheckpointSubscriptionPayload {
+    mutation: MutationType!
+    data: [Checkpoint!]!
 }

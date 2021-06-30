@@ -12,6 +12,7 @@ const schoolSchema = new Schema({
     name: { type: String, required: true },     // School name (UCB)
     deadline: { type: String, required: true },
     todos: [{ type: mongoose.Types.ObjectId, ref: 'Todo' }],
+    completed: { type: Boolean, required: true }
 });
 
 const todoSchema = new Schema({
@@ -20,12 +21,14 @@ const todoSchema = new Schema({
     deadline: { type: String, required: true },
     comment: { type: String, required: false },
     checkpoints: [{ type: mongoose.Types.ObjectId, ref: 'Checkpoint' }], // mongoose schema does not support json type
+    completed: { type: Boolean, required: true }
 })
 
 const checkpointSchema = new Schema({
     key: { type: String, required: true },
     content: { type: String, required: true },
     time: { type: String, required: true },
+    completed: { type: Boolean, required: true }
 })
 
 const UserModel = mongoose.model('User', userSchema);

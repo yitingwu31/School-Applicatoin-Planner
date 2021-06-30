@@ -1,10 +1,11 @@
-export const setCalendarTime = ({ year, month, date, hour, minute }) => {
+export const setCalendarTime = ( datestring ) => {
+    const date = datestring.split('-')
     const d = new Date();
-    d.setFullYear(year);
-    d.setMonth(month - 1);
-    d.setDate(date);
-    d.setHours(hour);
-    d.setMinutes(minute);
+    d.setFullYear(date[0]);
+    d.setMonth(date[1] - 1);
+    d.setDate(date[2]);
+    d.setHours(date[3]);
+    d.setMinutes(date[4]);
     return d;
 }
 
