@@ -5,25 +5,25 @@ import Mutation from './resolvers/Mutation';
 import School from './resolvers/School';
 import Todo from './resolvers/Todo';
 import User from './resolvers/User';
-// import Subscription from './resolvers/Subscription';
+import Subscription from './resolvers/Subscription';
 
 import mongo from './mongo';
 
-// const pubsub = new PubSub();
+const pubsub = new PubSub();
 
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers: {
         Query,
         Mutation,
-        // Subscription,
+        Subscription,
         School,
         Todo,
         User
     },
     context: {
         db, 
-        // pubsub,
+        pubsub,
     },
 });
 

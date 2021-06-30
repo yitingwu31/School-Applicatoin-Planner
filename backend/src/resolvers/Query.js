@@ -67,13 +67,6 @@ const Query = {
 
     async allByDate(parent, { user, year, month }, { db }, info) {
         let ret = [];
-        // let schools = await findUser(user, db).schools;
-        // console.log(schools)
-        // schools.forEach((school) => {
-        //     if (checkDeadline(year, month, school.deadline)) {
-        //         ret.push({ type: 'school', context: school.name, deadline: school.deadline});
-        //     }
-        // })
         let todos = await findTodo(user, year, month, db);
         let checkpoints = await findCheckpoint(user, year, month, db);
         todos.map((todo) => {
@@ -88,7 +81,6 @@ const Query = {
                 ret.push({ type: 'checkpoint', context: `${s[1]} ${s[2]} ${check.content}`, deadline: check.time, completed: check.completed });
             }
         })
-        console.log(ret);
         return ret;
     }
 };
