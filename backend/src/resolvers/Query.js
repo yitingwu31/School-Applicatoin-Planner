@@ -38,7 +38,7 @@ const Query = {
         return findUser(name, db);
     },
 
-    async userSchool(parent, { user, school }, { db }, info) {
+    async userSchool(parent, { user }, { db }, info) {
         // const key = makeSchoolKey(user, school);
         // const findschool = await db.SchoolModel.findOne({ key });
         // return findschool

@@ -11,7 +11,7 @@ type Mutation {
 
 type Query {
     user(name: String!): User
-    userSchool(user: String!, school: String!): [School!]!
+    userSchool(user: String!): [School!]!
     userMonthTodo(user: String!, year: Int!, month: Int!): [Todo]!
     userMonthCheckpoint(user: String!, year: Int!, month: Int!): [Checkpoint]!
     allByDate(user: String!, year: Int!, month: Int!): [TaskNote]!
