@@ -65,3 +65,7 @@
 - use [moment.js](https://momentjs.com/) (./frontend/src/utlils.js) to format Date
 - `cd frontend` && `yarn add moment`
 - Frontend Mutation
+
+### 6/30 Janiece
+- add sign in frontend page
+- TBD: backend
