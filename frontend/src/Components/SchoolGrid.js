@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +15,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ProgressBar from '../Components/ProgressBar'
 import ToDoList from '../Components/ToDoList'
 import Avatar from '@material-ui/core/Avatar';
+import { dateDisplay } from '../utils';
+import { useMutation } from '@apollo/client';
+import { COMPLETE_SCHOOL_MUTATION } from '../graphql';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,9 +51,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SchoolCard({key, name, date, rate}) {
+export default function SchoolCard({key, name, date, todos, rate, user, completed}) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+
+  const [missing, setMissing] = useState();
+  const [percent, setPercent] = useState(0);
+  const [completeSchool] = useMutation(COMPLETE_SCHOOL_MUTATION);
+
+  useEffect(() => {
+    let msg = findMissing(todos);
+    setMissing(msg);
+  }, [todos])
+
+  useEffect(() => {
+    async function compschool(missing) {
+      if (missing === "All done!" && completed === false) {
+        await completeSchool({
+          variables: {
+            key: `${user}-${name}`
+          }
+        })
+      };
+    };
+    compschool(missing);
+  }, [missing])
+
+  const findMissing = (todos) => {
+    let missing = todos.filter((todo) => todo.completed === false);
+    const per = Math.round((todos.length - missing.length) / todos.length * 100);
+    setPercent(per);
+    console.log(name, per);
+    if (missing.length === 0) {
+      return 'All done!'
+    }
+    let ret = 'Missing: ';
+    for (let i = 0; i < missing.length; i++) {
+      ret = ret.concat(`${missing[i].task}, `);
+    }
+    ret = ret.slice(0, -2)
+    return ret;
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -63,9 +104,9 @@ export default function SchoolCard({key, name, date, rate}) {
         avatar={
             <Avatar className={classes.avatar}>{rate}</Avatar>
         }
-        action={
-            <Button color="primary">Edit</Button>
-        }
+        // action={
+        //     <Button color="primary">Edit</Button>
+        // }
       />
       
       <CardContent>
@@ -74,12 +115,12 @@ export default function SchoolCard({key, name, date, rate}) {
                 <Typography className={classes.grid}>{name}</Typography>
             </Grid>
             <Grid item xs={6}>
-                <ProgressBar/>
-                <Typography>Missing: SOP, Letter</Typography>
+                <ProgressBar percent={percent}/>
+                <Typography>{missing}</Typography>
             </Grid>
             <Grid item xs={3}>
                 <Typography variant="subtitle1">Upcoming Date:</Typography>
-                <Typography variant="subtitle1">{date}</Typography>
+                <Typography variant="subtitle1">{dateDisplay(date)}</Typography>
             </Grid>
         </Grid>
       </CardContent>
@@ -95,10 +136,10 @@ export default function SchoolCard({key, name, date, rate}) {
         </IconButton>
       </CardActions>
       
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <Collapse in={expanded} timeout="auto">
         <CardContent>
             <h3>To-Do's:</h3>
-          <ToDoList/>
+          <ToDoList todos={todos} user={user}/>
         </CardContent>
       </Collapse>
     </Card>

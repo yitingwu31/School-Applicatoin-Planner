@@ -1,17 +1,18 @@
-import { format, subHours, startOfMonth, getMonth, getYear } from 'date-fns';
+import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { MonthlyBody, MonthlyDay, DefaultMonthlyEventItem } from '@zach.codes/react-calendar';
+import { MonthlyBody, MonthlyDay } from '@zach.codes/react-calendar';
 import { CALENDARMONTH_QUERY } from '../graphql';
+import MonthlyEventItem from './MonthlyEventItem';
 
 import { setCalendarTime } from '../utils';
 import { useQuery } from '@apollo/react-hooks';
 import { subscribe } from 'graphql';
 
-const MyMonthlyBody = ({ year, month }) => {
+const MyMonthlyBody = ({ user, year, month }) => {
     const [events, setEvents] = useState([]);
     const { loading, error, data, subscribeToMore } = useQuery(CALENDARMONTH_QUERY, {
         variables: {
-            user: "emily",
+            user: user,
             year: year,
             month: month
         }
@@ -23,11 +24,9 @@ const MyMonthlyBody = ({ year, month }) => {
         if (!loading && !error) {
             const tasklist = data.allByDate;
             let newEvents = [];
-            // console.log("tasklist: ", tasklist);
             tasklist.map((row) => {
-                newEvents.push({ title: row.context, date: setCalendarTime(row.deadline) })
+                newEvents.push({ title: row.context, date: setCalendarTime(row.deadline), completed: row.completed })
             })
-            // console.log("newevents: ", newEvents);
             setEvents(newEvents);
         }
     }, [data])
@@ -38,12 +37,11 @@ const MyMonthlyBody = ({ year, month }) => {
             <MonthlyDay
                 renderDay={data =>
                 data.map((item, index) => {
-                    // console.log(item.title, item.date);
                     return (
-                    <DefaultMonthlyEventItem
+                    <MonthlyEventItem 
                         key={index}
                         title={item.title}
-                        date={format(item.date, 'k:mm')}
+                        cp={item.completed}
                     />
                 )
             })

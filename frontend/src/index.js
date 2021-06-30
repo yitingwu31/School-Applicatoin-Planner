@@ -7,31 +7,39 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
+<<<<<<< HEAD
   HttpLink,
 } from "@apollo/client";
 
+=======
+  HttpLink
+} from "@apollo/client";
+>>>>>>> 6085e80842fd84ca66198037d839414a83402e27
 import { split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 
 
+<<<<<<< HEAD
 const client = new ApolloClient({
   uri: 'https://localhost:5000',
   cache: new InMemoryCache()
 });
 
+=======
+>>>>>>> 6085e80842fd84ca66198037d839414a83402e27
 const httpLink = new HttpLink({
   uri: 'http://localhost:5000/',
 });
 
-// Create a WebSocket link:
+// // Create a WebSocket link:
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:5000/`,
   options: { reconnect: true },
 });
 
-// using the ability to split links, you can send data to each link
-// depending on what kind of operation is being sent
+// // using the ability to split links, you can send data to each link
+// // depending on what kind of operation is being sent
 const link = split(
   // split based on operation type
   ({ query }) => {

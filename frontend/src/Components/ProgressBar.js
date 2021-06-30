@@ -34,23 +34,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ProgressBar() {
+export default function ProgressBar({ percent }) {
   const classes = useStyles();
-  const [progress, setProgress] = React.useState(10);
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-    }, 800);
-    
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
 
   return (
     <div className={classes.root}>
-      <LinearProgressWithLabel value={progress} />
+      <LinearProgressWithLabel value={percent} />
     </div>
   );
 }

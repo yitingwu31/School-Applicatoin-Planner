@@ -134,6 +134,14 @@ export const CREATE_CHECKPOINT_MUTATION = gql`
 	# 	completed
 	# }
 	}
-	
+`;
 
+export const COMPLETE_SCHOOL_MUTATION = gql`
+    mutation completeSchool (
+        $key: String!
+    ) {
+        completeSchool (
+            key: $key
+        )
+    }
 `;

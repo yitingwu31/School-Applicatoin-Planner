@@ -4,8 +4,9 @@ type Mutation {
     createTodo(owner: String!, school: String!, data: [CreateTodoInput]): [Todo]!
     createCheckpoint(owner: String!, school: String!, task: String!, data: [CreateCheckpointInput]): [Checkpoint]!
     updateTodo(user: String!, school: String!, task: String!, date: String!): Boolean!
-    completeTodo(user: String!, school: String!, task: String!): Boolean!
     updateCheckpoint(user: String!, school: String!, task: String!, content: String!, date: String!): Boolean!
+    completeSchool(key: String!): Boolean!
+    completeTodo(user: String!, school: String!, task: String!): Boolean!
     completeCheckpoint(user: String!, school: String!, task: String!, content: String!): Boolean!
 }
 
