@@ -14,6 +14,32 @@ export const CALENDARMONTH_QUERY = gql`
             type
             context
             deadline
+            completed
+        }
+    }
+`
+
+export const USER_SCHOOL_QUERY = gql`
+    query userSchool (
+        $user: String!
+    ) {
+        userSchool (
+            user: $user
+        ) {
+            name
+            deadline
+            key
+            completed
+            todos {
+                task
+                deadline
+                completed
+                checkpoints {
+                    content
+                    time
+                    completed
+                }
+            }
         }
     }
 `

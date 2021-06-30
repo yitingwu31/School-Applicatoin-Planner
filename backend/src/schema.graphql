@@ -70,6 +70,7 @@ type School {
     name: String!
     deadline: String!
     todos: [Todo!]
+    completed: Boolean!
 }
 
 type User {
