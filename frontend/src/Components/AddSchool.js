@@ -108,13 +108,20 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
     const [checked, setChecked] = useState([]);
     const [school, setSchool] = useState(_School)
     const schoolNameRef = useRef();
-    const [createSchool, { schooldata }] = useMutation(CREATE_SCHOOL_MUTATION)
-    const [createTodo, { tododata }] = useMutation(CREATE_TODO_MUTATION)
-    const [createCheckpoint, { checkpointdata }] = useMutation(CREATE_CHECKPOINT_MUTATION)
+    const [createSchool, { loading: SchoolLoading, error: SchoolError }] = useMutation(CREATE_SCHOOL_MUTATION)
+    const [createTodo, { loading: TodoLoading, error: TodoError }] = useMutation(CREATE_TODO_MUTATION)
+    const [createCheckpoint, { loading: CheckpointLoading, error: CheckpointError }] = useMutation(CREATE_CHECKPOINT_MUTATION)
 
+    // if (SchoolLoading) console.log("SchoolLoading")
+    // if(SchoolError) console.log("SchoolError",JSON.stringify(SchoolError, null, 2))
+    // if (TodoLoading) console.log("TodoLoading")
+    // if(TodoError) console.log("TodoError",TodoError)
+    // if (CheckpointLoading) console.log("CheckpointLoading")
+    // if(CheckpointError) console.log("CheckpointError",CheckpointError)
 
     const handleMutation = async (addSchool) => {
         const owner = "Emily" //modify later
+        //await 
         await createSchool({
             variables: {
                 owner: owner,
@@ -124,6 +131,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
         })
         for (let i = 0; i < addSchool.todos.length; i++) {
             let addTodo = { ...addSchool.todos[i] }
+            //await 
             await createTodo({
                 variables: {
                     owner: owner,
@@ -134,8 +142,10 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
                     comment: addTodo.comment
                 }
             })
-            for (let j = 0; i < addTodo.checkpoints.length; i++) {
+            for (let j = 0; j < addTodo.checkpoints.length; j++) {
                 let addCheckpoint = { ...addTodo.checkpoints[j] }
+                //console.log("addCheckpoint",addCheckpoint)
+                //await 
                 await createCheckpoint({
                     variables: {
                         owner: owner,
@@ -197,7 +207,7 @@ export default function CustomizedDialogs({ open, handleClose, setAddSchool, add
         AddSchool.name = schoolNameRef.current.value
         AddSchool.todos = AddSchoolTODOS
 
-        
+
 
         console.log("AddSchool: ", AddSchool)
         handleMutation(AddSchool)

@@ -43,15 +43,11 @@ export const CREATE_SCHOOL_MUTATION = gql`
       		$name: String!,
       		$deadline: String!
 		){
-		createSchool(
-			data:{
+		createSchool(data:{
 				owner: $owner
 				name:$name
 				deadline:$deadline
-			})
-			{
-				id
-				key
+			}){
 				name
 				deadline
 				todos{
@@ -71,7 +67,7 @@ export const CREATE_SCHOOL_MUTATION = gql`
 				}
 				completed
 			}
-	}
+		}
 `;
 
 export const CREATE_TODO_MUTATION = gql`
@@ -91,21 +87,21 @@ export const CREATE_TODO_MUTATION = gql`
 			comment:$comment
 		}
 	)
-	# {
-	# 	id
-	# 	key
-	# 	task
-	# 	deadline
-	# 	comment
-	# 	checkpoints{
-	# 		id
-	# 		key
-	# 		content
-	# 		time
-	# 		completed
-	# 	}
-	# 	completed
-	# }
+	{
+		id
+		key
+		task
+		deadline
+		comment
+		checkpoints{
+			id
+			key
+			content
+			time
+			completed
+		}
+		completed
+	}
 	}	
 `;
 
@@ -126,13 +122,13 @@ export const CREATE_CHECKPOINT_MUTATION = gql`
 			time: $time
 		}
 	)
-	# {
-	# 	id
-	# 	key
-	# 	content
-	# 	time
-	# 	completed
-	# }
+	{
+		id
+		key
+		content
+		time
+		completed
+	}
 	}
 `;
 
