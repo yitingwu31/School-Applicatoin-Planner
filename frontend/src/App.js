@@ -28,7 +28,7 @@ const App = () => {
 
   return (
     <div className="App">
-        {/* <BrowserRouter>
+        <BrowserRouter>
             <NavBar />
             <Switch>
             <Route exact path="/">
@@ -44,8 +44,8 @@ const App = () => {
             <AddSchool />
             </Route>
             </Switch>
-        </BrowserRouter> */}
-      {signedIn ? (
+        </BrowserRouter>
+      {/* {signedIn ? (
           <BrowserRouter>
               <NavBar />
               <Switch>
@@ -70,7 +70,7 @@ const App = () => {
               setSignedIn={setSignedIn}
               displayStatus={displayStatus}
           />
-        )}
+        )} */}
     </div>
   );
 }
