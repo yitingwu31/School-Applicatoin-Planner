@@ -17,7 +17,7 @@ export const CALENDARMONTH_QUERY = gql`
             completed
         }
     }
-`
+`;
 
 export const USER_SCHOOL_QUERY = gql`
     query userSchool (
@@ -44,4 +44,21 @@ export const USER_SCHOOL_QUERY = gql`
             }
         }
     }
-`
+`;
+
+export const UPCOMING_QUERY = gql`
+    query allInWeek (
+        $user: String!
+        $dates: [String!]!
+    ) {
+        allInWeek (
+            user: $user
+            dates: $dates
+        ) {
+            type
+            context
+            deadline
+            completed
+        }
+    }
+`;

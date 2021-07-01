@@ -9,7 +9,6 @@ import { withStyles } from '@material-ui/core/styles';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-// import { setCalendarTime, convertTimeString } from '../utils'
 import SchoolIcon from '@material-ui/icons/School';
 import CloseIcon from '@material-ui/icons/Close';
 import {

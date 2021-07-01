@@ -37,13 +37,18 @@ const Mutation = {
         return newschool;
     },
 
-    async updateSchool(parent, { user, school, date }, { db }, info) {
+    async updateSchool(parent, { user, school, date }, { db, pubsub }, info) {
         const key = makeSchoolKey(user, school );
         try {
             let school = await db.SchoolModel.findOne({ key });
             school.deadline = date
-            await school.save()
-
+            await school.save();
+            pubsub.publish(`school ${user}`, {
+                school: {
+                    mutation: 'UPDATED',
+                    data: school
+                }
+            })
         } catch (e) {
             console.log(e);
             return false;
@@ -96,8 +101,12 @@ const Mutation = {
         return newtodolist;
     },
 
-    async updateTodo(parent, { user, school, task, date }, { db }, info) {
+    async updateTodo(parent, { user, school, task, date }, { db, pubsub }, info) {
         const key = makeSchoolKey(user, school);
+        const schoolcard = await db.SchoolModel.findOne({ key });
+        if (!schoolcard) {
+            throw new Error("School has not been created!");
+        }
         try {
             let todo = await db.TodoModel.findOne({ key, task });
             todo.deadline = date;
@@ -106,6 +115,12 @@ const Mutation = {
             console.log(e);
             return false;
         }
+        pubsub.publish(`school ${user}`, {
+            school: {
+                mutation: 'UPDATED',
+                data: schoolcard
+            }
+        })
         return true;
     },
 
@@ -155,8 +170,10 @@ const Mutation = {
         return newcheckpointlist;
     },
 
-    async updateCheckpoint(parent, { user, school, task, content, date }, { db }, info) {
+    async updateCheckpoint(parent, { user, school, task, content, date }, { db, pubsub }, info) {
         const key = makeCheckpointKey(user, school, task);
+        const schoolkey = makeSchoolKey(user, school);
+        let schoolcard = await db.SchoolModel.findOne({ key: schoolkey });
         try {
             let checkpoint = await db.CheckpointModel.findOne({ key, content });
             checkpoint.time = date;
@@ -165,6 +182,12 @@ const Mutation = {
             console.log(e);
             return false;
         }
+        pubsub.publish(`school ${user}`, {
+            school: {
+                mutation: 'UPDATED',
+                data: schoolcard
+            }
+        })
         return true;
     },
 
