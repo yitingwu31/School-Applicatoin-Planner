@@ -38,7 +38,7 @@ const Mutation = {
     },
 
     async updateSchool(parent, { user, school, date }, { db, pubsub }, info) {
-        const key = makeSchoolKey(user, school );
+        const key = makeSchoolKey(user, school);
         try {
             let school = await db.SchoolModel.findOne({ key });
             school.deadline = date

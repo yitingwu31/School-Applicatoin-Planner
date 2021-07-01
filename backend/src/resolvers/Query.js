@@ -9,7 +9,7 @@ const findUser = async (name, db) => {
         .populate('password')
         .populate('schools')
         .populate({ path: 'schools', populate: 'todos' })
-        .populate({ path: 'schools', populate: { path: 'todos', populate: 'checkpoints' }})
+        .populate({ path: 'schools', populate: { path: 'todos', populate: 'checkpoints' } })
         .execPopulate();
 }
 
@@ -62,8 +62,17 @@ const findCheckpointWeek = async (user, dates, db) => {
 }
 
 const Query = {
-    async user(parent, { name }, { db }, info) {
-        return findUser(name, db);
+    async user(parent, { name, password }, { db }, info) {
+        const user = findUser(name, db)
+        if (user !== null) {
+            //Checking password
+            if (user.password === password) {
+                return user
+            }
+            else {
+                throw new Error("User exists, but wrong password!")
+            }
+        }
     },
 
     async userSchool(parent, { user }, { db }, info) {
@@ -77,7 +86,7 @@ const Query = {
 
     async userMonthTodo(parent, { user, year, month }, { db }, info) {
         return findTodo(user, year, month, db);
-    }, 
+    },
 
     async userMonthCheckpoint(parent, { user, year, month }, { db }, info) {
         return findCheckpoint(user, year, month, db);

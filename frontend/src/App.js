@@ -70,7 +70,7 @@ const App = () => {
               setSignedIn={setSignedIn}
               displayStatus={displayStatus}
           />
-        )} */}
+        )}
     </div>
   );
 }
