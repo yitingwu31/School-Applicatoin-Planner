@@ -251,16 +251,18 @@ export default function CustomizedAddSchool({ open, handleClose }) {
                 </DialogTitle>
                 <DialogContent dividers>
                     <div className={classes.margin}>
-                        <Grid container spacing={1} alignItems="flex-end">
-                            <Grid item xs={1}>
-                                <SchoolIcon />
+                        <Grid container spacing={1} alignItems="center" justify="space-between">
+                            <Grid container xs={7} spacing={2} alignItems="flex-end">
+                                <Grid item >
+                                    <SchoolIcon />
+                                </Grid>
+                                <Grid item>
+                                    <TextField id="input-with-icon-grid"
+                                        label="School Name" inputRef={schoolNameRef}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item>
-                                <TextField id="input-with-icon-grid"
-                                    label="School Name" inputRef={schoolNameRef}
-                                />
-                            </Grid>
-                            <Grid item >
+                            <Grid item xs={5} >
                                 <DatePicker
                                     todo={Todo}
                                     school={school}

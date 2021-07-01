@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 const App = () => {
   const LOCALSTORAGE_KEY = "save-user";
   const savedUser = localStorage.getItem(LOCALSTORAGE_KEY);
-  const [signedIn, setSignedIn] = useState(false);
+  const [signedIn, setSignedIn] = useState(true);
   const [user, setUser] = useState(savedUser || "");
   // show the corresponded history data of the user
   const displayStatus = (payload) => {
@@ -21,38 +21,38 @@ const App = () => {
 
   useEffect(() => {
     if (signedIn) {
-        localStorage.setItem(LOCALSTORAGE_KEY, user);
+      localStorage.setItem(LOCALSTORAGE_KEY, user);
     }
   }, [signedIn, user]);
 
   return (
     <div className="App">
       {signedIn ? (
-          <BrowserRouter>
-              <NavBar />
-              <Switch>
-              <Route exact path="/">
-                <Redirect to="/schools"/>
-              </Route>
-                <Route exact path="/schools">
-                <Schools />
-              </Route>
-              <Route exact path="/calendar">
-                <Calendar />
-              </Route>
-              <Route exact path="/addSchool">
-                <AddSchool />
-              </Route>
-              </Switch>
-          </BrowserRouter>
-        ) : (
-          <SignIn
-              user={user}
-              setUser={setUser}
-              setSignedIn={setSignedIn}
-              displayStatus={displayStatus}
-          />
-        )}
+        <BrowserRouter>
+          <NavBar />
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/schools" />
+            </Route>
+            <Route exact path="/schools">
+              <Schools />
+            </Route>
+            <Route exact path="/calendar">
+              <Calendar />
+            </Route>
+            <Route exact path="/addSchool">
+              <AddSchool />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      ) : (
+        <SignIn
+          user={user}
+          setUser={setUser}
+          setSignedIn={setSignedIn}
+          displayStatus={displayStatus}
+        />
+      )}
     </div>
   );
 }
