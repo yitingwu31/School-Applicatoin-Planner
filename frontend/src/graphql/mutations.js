@@ -47,8 +47,10 @@ export const CREATE_USER_MUTATION = gql`
             name:$name,
             password:$password
         ){
+            id
             name
             password
+            schools
         }
   }
 `;

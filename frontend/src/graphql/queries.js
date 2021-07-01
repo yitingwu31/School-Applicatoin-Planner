@@ -71,8 +71,10 @@ export const USER_QUERY = gql`
             user: $user
             password: $ password
         ) {
-            username
+            id
+            name
             password
+            schools
         }
     }
 `;
