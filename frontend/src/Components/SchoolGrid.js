@@ -128,6 +128,7 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 			}
 		}
 		ret = ret === '' ? "All done!" : ret.slice(0, -2);
+		setMissing(ret);
 		setPercent(Math.round((todos.length - fakeMissings.length) / todos.length * 100));
 	}
 
