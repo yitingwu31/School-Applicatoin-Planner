@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Toolbar, IconButton, Button, Menu, MenuItem } from '@material-ui/core'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
-import { Link as MaterialLink } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom'
-import { OpenInBrowserRounded } from '@material-ui/icons'
 import AddSchool from './AddSchool'
 
 const NavBar = () => {
@@ -18,7 +16,6 @@ const NavBar = () => {
     }
     // Add School
     const [addOpen, setAddOpen] = useState(false);
-    // const [addSchool, setAddSchool] = useState({})
     const handleAddOpen = () => {
         setAddOpen(true);
     };
@@ -32,7 +29,7 @@ const NavBar = () => {
         <div>
             <Toolbar>
                 <Button aria-controls="view-menu" aria-haspopup="true" onClick={handleClick}>
-                    View
+                    VIEW
                 </Button>
                 <Menu id="view-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
                     <MenuItem onClick={handleClose} component={RouterLink} to="/schools">School</MenuItem>
@@ -42,10 +39,8 @@ const NavBar = () => {
                     <AddCircleIcon />
                 </IconButton>
                 <AddSchool
-                    // addSchool={addSchool}
                     handleClose={handleAddClose}
                     open={addOpen}
-                // setAddSchool={setAddSchool}
                 />
 
             </Toolbar>

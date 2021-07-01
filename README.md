@@ -67,3 +67,8 @@
 - Frontend Create & Update Mutation
 - Edit Button in School View
 - TBD: css improvement
+- Frontend Mutation
+
+### 6/30 Janiece
+- add sign in frontend page
+- TBD: backend

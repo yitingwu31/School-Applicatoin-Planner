@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { MonthlyBody, MonthlyDay } from '@zach.codes/react-calendar';
 import { CALENDARMONTH_QUERY } from '../graphql';
@@ -15,13 +14,14 @@ const MyMonthlyBody = ({ user, year, month }) => {
             year: year,
             month: month
         },
-        fetchPolicy: "cache-and-network"
+        fetchPolicy: "network-only"
     });
 
     useEffect(() => {
         if (loading) console.log("Loading...");
         if (error) console.log("Error: ", error);
         if (!loading && !error) {
+            console.log("calendar query done!");
             const tasklist = data.allByDate;
             let newEvents = [];
             tasklist.map((row) => {

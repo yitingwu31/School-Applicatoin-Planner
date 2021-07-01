@@ -15,11 +15,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ProgressBar from '../Components/ProgressBar'
 import ToDoList from '../Components/ToDoList'
 import Avatar from '@material-ui/core/Avatar';
-import { dateDisplay } from '../utils';
+import { dateDisplay, missingDisplay } from '../utils';
 import { useMutation } from '@apollo/client';
 import { COMPLETE_SCHOOL_MUTATION } from '../graphql';
 import EditIcon from '@material-ui/icons/Edit';
-import EditSchool  from './EditSchool'
+import EditSchool from './EditSchool'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -52,17 +52,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function SchoolCard({ key, name, date, todos, rate, user, completed}) {
+export default function SchoolCard({ key, name, date, todos, rate, user, completed }) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
 
 	const [editOpen, setEditOpen] = useState(false)
 	const handleEditOpen = () => {
-        setEditOpen(true);
-    };
-    const handleEditClose = () => {
-        setEditOpen(false);
-    };
+		setEditOpen(true);
+	};
+	const handleEditClose = () => {
+		setEditOpen(false);
+	};
 
 	const [missing, setMissing] = useState();
 	const [allNum, setAllNum] = useState(0);
@@ -88,6 +88,9 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 		compschool(missing);
 	}, [missing])
 
+	const handleExpandClick = () => {
+		setExpanded(!expanded);
+	};
 	const findMissing = (todos) => {
 		let missing = todos.filter((todo) => todo.completed === false);
 		setAllNum(todos.length);
@@ -97,9 +100,9 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 		if (missing.length === 0) {
 			return 'All done!'
 		}
-		let ret = 'Missing: ';
+		let ret = '';
 		for (let i = 0; i < missing.length; i++) {
-			ret = ret.concat(`${missing[i].task}, `);
+			ret = ret.concat(`${missingDisplay(missing[i].task)}, `);
 		}
 		ret = ret.slice(0, -2)
 		return ret;
@@ -108,25 +111,19 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 	const fakeCheck = (task) => {
 		let arr = missing.split(': ').join(', ').split(', ');
 		// console.log(arr);
-		let ret = 'Missing: ';
+		let ret = '';
 		for (let i = 1; i < arr.length; i++) {
 			if (arr[i] !== task) {
-				ret = ret.concat(`${arr[i]}, `);
+				ret = ret.concat(`${missingDisplay(arr[i])}, `);
 			}
 		}
-		ret = ret.slice(0, -2);
-		if (ret === "Missing") {
-			ret = "All done!";
-		}
+		ret = ret === '' ? "All done!" : ret.slice(0, -2);
+
 		setMissing(ret);
 		const olddone = doneNum;
 		setDoneNum(olddone + 1);
 		setPercent(Math.round((olddone + 1) / allNum * 100));
 	}
-
-	const handleExpandClick = () => {
-		setExpanded(!expanded);
-	};
 
 	return (
 		<Box m={1.5}>
@@ -149,7 +146,7 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 					user={user}
 					editOpen={editOpen}
 					handleEditClose={handleEditClose}
-					
+
 				/>
 				<CardContent>
 					<Grid container spacing={2}>
