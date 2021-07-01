@@ -2,16 +2,16 @@ import { Calendar } from '.';
 import { Upcoming } from '../Components';
 import Grid from '@material-ui/core/Grid';
 
-export default function CalendarPage() {
+export default function CalendarPage({ user }) {
 
     return (
         <div>
             <Grid container spacing={2}>
                 <Grid item xs={9}>
-                    <Calendar />
+                    <Calendar user={user}/>
                 </Grid>
                 <Grid item xs={3}>
-                    <Upcoming />
+                    <Upcoming user={user}/>
                 </Grid>
             </Grid>
         </div>

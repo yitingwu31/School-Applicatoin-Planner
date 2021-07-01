@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Upcoming = ({ user="emily" }) => {
+const Upcoming = ({ user }) => {
     const classes = useStyles();
     const [weekstr, setWeestr] = useState([]);
     const [upcoming, setUpcoming] = useState([]);

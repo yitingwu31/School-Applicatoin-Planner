@@ -1,10 +1,10 @@
 import MyMonth from './MyMonth';
 import '@zach.codes/react-calendar/dist/calendar-tailwind.css';
 
-const Calendar = () => {
+const Calendar = ({ user }) => {
     return (
         <div className="Calendar">
-            <MyMonth />
+            <MyMonth user={user}/>
         </div>
         
     )

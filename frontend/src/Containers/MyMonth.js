@@ -6,10 +6,7 @@ import {
 
 import MyMonthlyBody from '../Components/MyMonthlyBody';
 import MyMonthNav from '../Components/MyMonthNav';
-
-let user = "emily"
-
-const MyMonth = () => {
+const MyMonth = ({ user }) => {
 
   let [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
   const onMonthChange = (date) => {
