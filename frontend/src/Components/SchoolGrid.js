@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     fontFamily: font,
-    fontSize: '24px',
+    fontSize: '21px',
     color: 'black',
     fontWeight: '500'
   },

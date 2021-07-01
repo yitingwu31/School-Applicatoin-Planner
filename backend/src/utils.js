@@ -7,8 +7,20 @@ export const makeCheckpointKey = (owner, school, task) => {
 }
 
 export const checkDeadline = (year, month, deadline) => {
-    let date = deadline.split('-');
-    return date[0] == year && date[1] == month;
+    let deaddate = deadline.split('-');
+    return parseInt(deaddate[0]) == year && parseInt(deaddate[1]) == month;
+}
+
+// for week: dates is an array of string
+export const checkDeadlineWeek = (dates, deadline) => {
+    const deaddate = deadline.split('-');
+    for (let i = 0; i < dates.length; i++) {
+        const date = dates[i].split('-');
+        if (parseInt(date[0]) == parseInt(deaddate[0]) && parseInt(date[1]) == parseInt(deaddate[1]) && parseInt(date[2]) == parseInt(deaddate[2])) {
+            return true;
+        }
+    }
+    return false;
 }
 
 export const missingDisplay = (longstring) => {

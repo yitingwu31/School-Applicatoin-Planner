@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontFamily: font,
     height: '60px',
-    fontSize: '30px',
+    fontSize: '25px',
     paddingTop: '15px'
   }
 }));

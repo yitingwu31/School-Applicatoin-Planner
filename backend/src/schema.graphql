@@ -17,6 +17,7 @@ type Query {
     userMonthTodo(user: String!, year: Int!, month: Int!): [Todo]!
     userMonthCheckpoint(user: String!, year: Int!, month: Int!): [Checkpoint]!
     allByDate(user: String!, year: Int!, month: Int!): [TaskNote]!
+    allInWeek(user: String!, dates: [String!]!): [TaskNote]!
 }
 
 type Subscription {

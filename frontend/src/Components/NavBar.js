@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     toolbarTitle: {
         flex: 1,
         fontFamily: font,
-        fontSize: '40px',
+        fontSize: '35px',
         fontWeight: 'bold',
         color: 'white',
         marginLeft: '20px'
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     toolbarMenu: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: '20px',
+        fontSize: '18px',
         paddingRight: '30px',
         paddingLeft: '20px',
         "&:focus": {
