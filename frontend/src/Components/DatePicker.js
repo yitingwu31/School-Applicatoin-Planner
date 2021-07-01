@@ -28,7 +28,7 @@ export default function DatePicker({
     //const [selectedDate, setSelectedDate] = React.useState(new Date());
     const [selectedDate, setSelectedDate] = React.useState(dldate);
     const handleSchoolDeadline = (date) => {
-        console.log('in handleSchoolDeadline')
+        // console.log('in handleSchoolDeadline')
         SCHOOL.deadline = date
         setSchool(SCHOOL)
     }
@@ -39,8 +39,8 @@ export default function DatePicker({
     }
 
     const handleCheckpointDeadline = (date) => {
-        console.log("in datepicker.handleCheckpointDeadline")
-        console.log("num", num)
+        // console.log("in datepicker.handleCheckpointDeadline")
+        // console.log("num", num)
         let CHECKPOINTS = [...TODO.checkpoints]
         let CHECKPOINT = { ...TODO.checkpoints[num] }
         CHECKPOINT.time = date

@@ -52,14 +52,14 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
         setSchool(nxtSchool)
     }
     const handleAddCheckpoint = (todo, Checkpoint) => (event) => {
-        console.log("handleAddCheckpoint")
+        // console.log("handleAddCheckpoint")
         if (event.keyCode === 13) {
 
             //https://stackoverflow.com/a/63724115
             const td = { ...todo }
             const index = findTodoIndex(td)
             const cpindex = findCheckpointIndex(td, event.target.value)
-            console.log("index, cpindex:", index, cpindex)
+            // console.log("index, cpindex:", index, cpindex)
             const existing = (x) => {
                 if (x === -1) return false
                 else return true
@@ -82,8 +82,8 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
 
                 return
             }
-            console.log("CHECKPOINTS", CHECKPOINTS)
-            console.log("nxtSchool in addcheckpoint:", nxtSchool)
+            // console.log("CHECKPOINTS", CHECKPOINTS)
+            // console.log("nxtSchool in addcheckpoint:", nxtSchool)
             
             setSchool(nxtSchool)
             event.target.value = ""
