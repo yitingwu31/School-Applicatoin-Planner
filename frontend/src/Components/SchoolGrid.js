@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -21,36 +20,48 @@ import { COMPLETE_SCHOOL_MUTATION } from '../graphql';
 import EditIcon from '@material-ui/icons/Edit';
 import EditSchool from './EditSchool'
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-		maxWidth: '98%',
-		marginLeft: 'auto',
-		marginRight: 'auto',
-		backgroundColor: '#E9EAEC',
-	},
-	header: {
-		auto: 'left',
-	},
-	expand: {
-		transform: 'rotate(0deg)',
-		marginLeft: 'auto',
-		transition: theme.transitions.create('transform', {
-			duration: theme.transitions.duration.shortest,
-		}),
-	},
-	expandOpen: {
-		transform: 'rotate(180deg)',
-	},
-	grid: {
-		padding: theme.spacing(2),
-		textAlign: 'center',
-	},
-	avatar: {
-		backgroundColor: '#FAD02C',
-	},
-}));
+// const font = ['Libre Baskerville', 'serif', 'Quicksand', 'sans-serif'].join(',');
+const font = ['Quicksand', 'sans-serif'].join(',');
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    maxWidth: '98%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    backgroundColor: '#E9EAEC',
+  },
+  header: {
+      auto: 'left',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  grid: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    fontFamily: font,
+    fontSize: '24px',
+    color: 'black',
+    fontWeight: '500'
+  },
+  avatar: {
+    backgroundColor: '#FAD02C',
+  },
+  item: {
+    fontFamily: font,
+    fontSize: '18px',
+    color: 'black',
+    fontWeight: '400'
+  }
+}));
 
 export default function SchoolCard({ key, name, date, todos, rate, user, completed }) {
 	const classes = useStyles();
@@ -174,7 +185,6 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 						<ExpandMoreIcon />
 					</IconButton>
 				</CardActions>
-
 				<Collapse in={expanded} timeout="auto">
 					<CardContent>
 						<h3>To-Do's:</h3>
