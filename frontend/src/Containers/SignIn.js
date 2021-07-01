@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const SignIn = ({ setUser, setSignIn }) => {
+const SignIn = ({ setUser, setSignedIn }) => {
 
 	const classes = useStyles();
 	const [values, setValues] = React.useState({
@@ -85,18 +85,22 @@ const SignIn = ({ setUser, setSignIn }) => {
 			})
 			await refetch()
 			if (error) console.log("query error: ", JSON.stringify(error, null, 2))
+			console.log("refetchdata", data.user)
 
-			console.log("refetchdata", data)
+			console.log("data.username", data.user.name, "addUser.username", addUser.username)
+			console.log('data.password', data.user.password, "addUser.password", addUser.password)
+			if (data.user.name === addUser.username
+				&& data.user.password === addUser.password
+			) {
+				console.log("sign in")
+				setUser(data.user.name)
+				setSignedIn(true)
+			}
+
 		} catch (e) {
 			console.log(e)
 		}
-		if (data.username === addUser.username
-			&& data.password === addUser.password
-		) {
-			console.log("sign in")
-			setUser(addUser.username)
-			setSignIn(true)
-		}
+
 
 	}
 
