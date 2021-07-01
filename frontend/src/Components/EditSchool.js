@@ -142,6 +142,11 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
     if (TodoError) console.log("TodoError: ", JSON.stringify(TodoError, null, 2))
     if (CheckpointLoading) console.log("CheckpointLoading")
     if (CheckpointError) console.log("CheckpointError: ", JSON.stringify(CheckpointError, null, 2))
+    
+    if (crTodoLoading) console.log("crTodoLoading")
+    if (crTodoError) console.log("crTodoError: ", JSON.stringify(crTodoError, null, 2))
+    if (crCheckpointLoading) console.log("crCheckpointLoading")
+    if (crCheckpointError) console.log("crCheckpointError: ", JSON.stringify(crCheckpointError, null, 2))
 
     const DatetypeIsNotString = (date) => {
         if (typeof (date) !== "string") {
