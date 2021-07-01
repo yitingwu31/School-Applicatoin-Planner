@@ -32,7 +32,7 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
         */
         let nxtSchool = { ...school }
         if (event.keyCode === 13) {
-            let newTask =  addTodoRef.current.value
+            let newTask = addTodoRef.current.value
             const newTodo = {
                 task: newTask,
                 deadline: defaultDeadline,
@@ -90,7 +90,7 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
             }
             // console.log("CHECKPOINTS", CHECKPOINTS)
             // console.log("nxtSchool in addcheckpoint:", nxtSchool)
-            
+
             setSchool(nxtSchool)
             event.target.value = ""
             return
@@ -177,68 +177,78 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
                             </Grid>
 
                             <Grid item xs={4}>
-                                <DatePicker 
-                                    todo={todo} 
+                                <DatePicker
+                                    todo={todo}
                                     handleSetTodo={handleSetTodo}
                                     school={school}
                                     type="todo"
                                     pickerlable={`deadline ${index}`} />
                             </Grid>
                         </AccordionSummary>
-                        <AccordionDetails>
 
-                            <Grid className={classes.margin} container spacing={1}
-                                alignItems="flex-end">
-                                <Grid item xs={1}>
-                                    <CommentIcon />
+                        <AccordionDetails>
+                            <Grid container spacing={0} alignItems="flex-end" justify="space-between">
+                                <Grid container spacing={1} alignItems="flex-end" xs={7}>
+                                    <Grid item>
+                                        <CommentIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField id="input-with-icon-grid"
+                                            variant="outlined"
+                                            label="add Todo Comment"
+                                            onChange={handleAddComment(todo)}
+                                        />
+                                    </Grid>
                                 </Grid>
-                                <Grid item>
-                                    <TextField id="input-with-icon-grid"
-                                        variant="outlined"
-                                        label="Type Comment..."
-                                        onChange={handleAddComment(todo)}
-                                    />
+                                <Grid container spacing={1} alignItems="flex-end" xs={5}>
+                                    <Grid item >
+                                        <AddCircleIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField
+                                            id="add-checkpoint-input"
+                                            label="add Checkpoint"
+                                            onKeyDown={handleAddCheckpoint(todo, Checkpoint)}
+                                        />
+                                    </Grid>
                                 </Grid>
                             </Grid>
-
-                            <Grid container>
-                                <List>
-                                    {todo.checkpoints.map((checkpoint, index) => {
-
-                                        const content = checkpoint.content
-
-                                        return (
-                                            <ListItem>
-                                                <ListItemIcon>
+                        </AccordionDetails>
+                        <Divider />
+                        <AccordionDetails>
+                            <Grid container spacing={0} alignItems="flex-end" justify="space-between">
+                                {todo.checkpoints.map((checkpoint, index) => {
+                                    const content = checkpoint.content
+                                    return (
+                                        <Grid container spacing={0} alignItems="flex-end">
+                                            <Grid container xs={7} alignItems="flex-end" spacing={1}>
+                                                <Grid item >
                                                     <CheckCircleOutlineIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={content} />
+                                                </Grid>
+                                                <Grid item >
+                                                    {/* <TextField primary={`checkpoint: ${content}`} /> */}
+                                                    <Typography>{`checkpoint: ${content}`}</Typography>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Grid item xs={5}>
                                                 <DatePicker
                                                     todo={todo}
                                                     school={school}
                                                     handleSetTodo={handleSetTodo}
                                                     type="checkpoint"
                                                     num={findCheckpointIndex(todo, content)}
-                                                    pickerlable={`deadline ${index}`} />
-                                            </ListItem>
-                                        )
-                                    })}
-                                </List>
-                            </Grid>
+                                                    pickerlable={`deadline ${index}`}
+                                                />
+                                            </Grid>
 
-                            <Grid className={classes.margin} container spacing={0}
-                                alignItems="flex-end" justify="flex-start">
-                                <Grid item xs={1}>
-                                    <AddCircleIcon />
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <TextField
-                                        id="add-checkpoint-input"
-                                        label="Add Checkpoint"
-                                        onKeyDown={handleAddCheckpoint(todo, Checkpoint)}
-                                    />
-                                </Grid>
+                                        </Grid>
+                                    )
+                                })}
                             </Grid>
+                        </AccordionDetails>
+                        <AccordionDetails>
+
                         </AccordionDetails>
                     </Accordion>
 

@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     if (signedIn) {
-        localStorage.setItem(LOCALSTORAGE_KEY, user);
+      localStorage.setItem(LOCALSTORAGE_KEY, user);
     }
   }, [signedIn, user]);
 
