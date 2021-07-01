@@ -26,7 +26,7 @@ const App = () => {
 
   return (
     <div className="App">
-      {signedIn ? (
+      {true ? (
           <BrowserRouter>
               <NavBar />
               <Switch>
