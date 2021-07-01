@@ -85,7 +85,7 @@ const SignIn = ({ setUser, setSignIn }) => {
 			})
 			await refetch()
 			if (error) console.log("query error: ", JSON.stringify(error, null, 2))
-			
+
 			console.log("refetchdata", data)
 		} catch (e) {
 			console.log(e)
@@ -93,6 +93,7 @@ const SignIn = ({ setUser, setSignIn }) => {
 		if (data.username === addUser.username
 			&& data.password === addUser.password
 		) {
+			console.log("sign in")
 			setUser(addUser.username)
 			setSignIn(true)
 		}
