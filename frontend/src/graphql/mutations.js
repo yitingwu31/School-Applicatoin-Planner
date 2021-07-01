@@ -86,7 +86,7 @@ export const CREATE_TODO_MUTATION = gql`
 		$school:String!,
 		$task:String!,
 		$deadline:String!,
-		$comment:String!
+		$comment:String
 	){
 	createTodo(
 		owner: $owner

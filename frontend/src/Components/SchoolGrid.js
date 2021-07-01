@@ -24,43 +24,43 @@ import EditSchool from './EditSchool'
 const font = ['Quicksand', 'sans-serif'].join(',');
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    maxWidth: '98%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    backgroundColor: '#E9EAEC',
-  },
-  header: {
-      auto: 'left',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  grid: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    fontFamily: font,
-    fontSize: '21px',
-    color: 'black',
-    fontWeight: '500'
-  },
-  avatar: {
-    backgroundColor: '#FAD02C',
-  },
-  item: {
-    fontFamily: font,
-    fontSize: '18px',
-    color: 'black',
-    fontWeight: '400'
-  }
+	root: {
+		flexGrow: 1,
+		maxWidth: '98%',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		backgroundColor: '#E9EAEC',
+	},
+	header: {
+		auto: 'left',
+	},
+	expand: {
+		transform: 'rotate(0deg)',
+		marginLeft: 'auto',
+		transition: theme.transitions.create('transform', {
+			duration: theme.transitions.duration.shortest,
+		}),
+	},
+	expandOpen: {
+		transform: 'rotate(180deg)',
+	},
+	grid: {
+		padding: theme.spacing(2),
+		textAlign: 'center',
+		fontFamily: font,
+		fontSize: '21px',
+		color: 'black',
+		fontWeight: '500'
+	},
+	avatar: {
+		backgroundColor: '#FAD02C',
+	},
+	item: {
+		fontFamily: font,
+		fontSize: '18px',
+		color: 'black',
+		fontWeight: '400'
+	}
 }));
 
 export default function SchoolCard({ key, name, date, todos, rate, user, completed }) {
@@ -77,7 +77,7 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 
 	const [missing, setMissing] = useState();
 	const [percent, setPercent] = useState(0);
-  const [fakeMissings, setFakeMissings] = useState([]);
+	const [fakeMissings, setFakeMissings] = useState([]);
 	const [completeSchool] = useMutation(COMPLETE_SCHOOL_MUTATION);
 
 	useEffect(() => {
@@ -104,7 +104,7 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 
 	const findMissing = (todos) => {
 		let missing = todos.filter((todo) => todo.completed === false);
-    setFakeMissings(missing);
+		setFakeMissings(missing);
 		const per = Math.round((todos.length - missing.length) / todos.length * 100);
 		setPercent(per);
 		if (missing.length === 0) {
@@ -119,16 +119,16 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 	}
 
 	const fakeCheck = (task) => {
-    let ret = '';
-    for (let i = 0; i < fakeMissings.length; i++) {
-      if (fakeMissings[i].task === task) {
-        fakeMissings.splice(i,1);
-      } else {
-        ret = ret.concat(`${missingDisplay(fakeMissings[i].task)}, `);
-      }
-    }
+		let ret = '';
+		for (let i = 0; i < fakeMissings.length; i++) {
+			if (fakeMissings[i].task === task) {
+				fakeMissings.splice(i, 1);
+			} else {
+				ret = ret.concat(`${missingDisplay(fakeMissings[i].task)}, `);
+			}
+		}
 		ret = ret === '' ? "All done!" : ret.slice(0, -2);
-    setPercent(Math.round((todos.length - fakeMissings.length) / todos.length * 100));
+		setPercent(Math.round((todos.length - fakeMissings.length) / todos.length * 100));
 	}
 
 	return (
