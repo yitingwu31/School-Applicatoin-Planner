@@ -33,13 +33,21 @@ export default function CheckboxListSecondary({ todos, user, fakeCheck }) {
   const [completeTodo] = useMutation(COMPLETE_TODO_MUTATION);
 
   useEffect(() => {
-    let chk = [];
-    todos.map((todo, idx) => {
-      if (todo.completed === true) {
-        chk.push(idx);
+    function setCheck() {
+      let chk = [];
+      // todos.map((todo, idx) => {
+      //   if (todo.completed === true) {
+      //     chk.push(idx);
+      //   }
+      // })
+      for (let i = 0; i < todos.length; i++) {
+        if (todos[i].completed === true) {
+          chk.push(i);
+        }
       }
-    })
-    setChecked(chk);
+      setChecked(chk);
+    }
+    setCheck();
   }, [todos]);
 
   const handleToggle = (value) => () => {
