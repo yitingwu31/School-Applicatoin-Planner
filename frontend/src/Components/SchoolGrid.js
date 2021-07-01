@@ -18,153 +18,173 @@ import Avatar from '@material-ui/core/Avatar';
 import { dateDisplay } from '../utils';
 import { useMutation } from '@apollo/client';
 import { COMPLETE_SCHOOL_MUTATION } from '../graphql';
-
+import EditIcon from '@material-ui/icons/Edit';
+import EditSchool  from './EditSchool'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    maxWidth: '98%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    backgroundColor: '#E9EAEC',
-  },
-  header: {
-      auto: 'left',
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  grid: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-  },
-  avatar: {
-    backgroundColor: '#FAD02C',
-  },
+	root: {
+		flexGrow: 1,
+		maxWidth: '98%',
+		marginLeft: 'auto',
+		marginRight: 'auto',
+		backgroundColor: '#E9EAEC',
+	},
+	header: {
+		auto: 'left',
+	},
+	expand: {
+		transform: 'rotate(0deg)',
+		marginLeft: 'auto',
+		transition: theme.transitions.create('transform', {
+			duration: theme.transitions.duration.shortest,
+		}),
+	},
+	expandOpen: {
+		transform: 'rotate(180deg)',
+	},
+	grid: {
+		padding: theme.spacing(2),
+		textAlign: 'center',
+	},
+	avatar: {
+		backgroundColor: '#FAD02C',
+	},
 }));
 
 
-export default function SchoolCard({key, name, date, todos, rate, user, completed}) {
-  const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+export default function SchoolCard({ key, name, date, todos, rate, user, completed}) {
+	const classes = useStyles();
+	const [expanded, setExpanded] = React.useState(false);
 
-  const [missing, setMissing] = useState();
-  const [allNum, setAllNum] = useState(0);
-  const [doneNum, setDoneNum] = useState(0);
-  const [percent, setPercent] = useState(0);
-  const [completeSchool] = useMutation(COMPLETE_SCHOOL_MUTATION);
-
-  useEffect(() => {
-    let msg = findMissing(todos);
-    setMissing(msg);
-  }, [todos])
-
-  useEffect(() => {
-    async function compschool(missing) {
-      if (missing === "All done!" && completed === false) {
-        await completeSchool({
-          variables: {
-            key: `${user}-${name}`
-          }
-        })
-      };
+	const [editOpen, setEditOpen] = useState(false)
+	const handleEditOpen = () => {
+        setEditOpen(true);
     };
-    compschool(missing);
-  }, [missing])
+    const handleEditClose = () => {
+        setEditOpen(false);
+    };
 
-  const findMissing = (todos) => {
-    let missing = todos.filter((todo) => todo.completed === false);
-    setAllNum(todos.length);
-    setDoneNum(todos.length - missing.length);
-    const per = Math.round((todos.length - missing.length) / todos.length * 100);
-    setPercent(per);
-    if (missing.length === 0) {
-      return 'All done!'
-    }
-    let ret = 'Missing: ';
-    for (let i = 0; i < missing.length; i++) {
-      ret = ret.concat(`${missing[i].task}, `);
-    }
-    ret = ret.slice(0, -2)
-    return ret;
-  }
+	const [missing, setMissing] = useState();
+	const [allNum, setAllNum] = useState(0);
+	const [doneNum, setDoneNum] = useState(0);
+	const [percent, setPercent] = useState(0);
+	const [completeSchool] = useMutation(COMPLETE_SCHOOL_MUTATION);
 
-  const fakeCheck = (task) => {
-    let arr = missing.split(': ').join(', ').split(', ');
-    // console.log(arr);
-    let ret = 'Missing: ';
-    for (let i = 1; i < arr.length; i++) {
-      if (arr[i] !== task) {
-        ret = ret.concat(`${arr[i]}, `);
-      }
-    }
-    ret = ret.slice(0,-2);
-    if (ret === "Missing") {
-      ret = "All done!";
-    }
-    setMissing(ret);
-    const olddone = doneNum;
-    setDoneNum(olddone + 1);
-    setPercent(Math.round((olddone + 1) / allNum * 100));
-  }
+	useEffect(() => {
+		let msg = findMissing(todos);
+		setMissing(msg);
+	}, [todos])
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+	useEffect(() => {
+		async function compschool(missing) {
+			if (missing === "All done!" && completed === false) {
+				await completeSchool({
+					variables: {
+						key: `${user}-${name}`
+					}
+				})
+			};
+		};
+		compschool(missing);
+	}, [missing])
 
-  return (
-    <Box m={1.5}>
-    <Card className={classes.root}>
-      <CardHeader className={classes.header}
-        avatar={
-            <Avatar className={classes.avatar}>{rate}</Avatar>
-        }
-        // action={
-        //     <Button color="primary">Edit</Button>
-        // }
-      />
-      
-      <CardContent>
-        <Grid container spacing={2}>
-            <Grid item xs={3}>
-                <Typography className={classes.grid}>{name}</Typography>
-            </Grid>
-            <Grid item xs={6}>
-                <ProgressBar percent={percent}/>
-                <Typography>{missing}</Typography>
-            </Grid>
-            <Grid item xs={3}>
-                <Typography variant="subtitle1">Upcoming Date:</Typography>
-                <Typography variant="subtitle1">{dateDisplay(date)}</Typography>
-            </Grid>
-        </Grid>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more">
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      
-      <Collapse in={expanded} timeout="auto">
-        <CardContent>
-            <h3>To-Do's:</h3>
-          <ToDoList todos={todos} user={user} fakeCheck={fakeCheck}/>
-        </CardContent>
-      </Collapse>
-    </Card>
-    </Box>
-  );
+	const findMissing = (todos) => {
+		let missing = todos.filter((todo) => todo.completed === false);
+		setAllNum(todos.length);
+		setDoneNum(todos.length - missing.length);
+		const per = Math.round((todos.length - missing.length) / todos.length * 100);
+		setPercent(per);
+		if (missing.length === 0) {
+			return 'All done!'
+		}
+		let ret = 'Missing: ';
+		for (let i = 0; i < missing.length; i++) {
+			ret = ret.concat(`${missing[i].task}, `);
+		}
+		ret = ret.slice(0, -2)
+		return ret;
+	}
+
+	const fakeCheck = (task) => {
+		let arr = missing.split(': ').join(', ').split(', ');
+		// console.log(arr);
+		let ret = 'Missing: ';
+		for (let i = 1; i < arr.length; i++) {
+			if (arr[i] !== task) {
+				ret = ret.concat(`${arr[i]}, `);
+			}
+		}
+		ret = ret.slice(0, -2);
+		if (ret === "Missing") {
+			ret = "All done!";
+		}
+		setMissing(ret);
+		const olddone = doneNum;
+		setDoneNum(olddone + 1);
+		setPercent(Math.round((olddone + 1) / allNum * 100));
+	}
+
+	const handleExpandClick = () => {
+		setExpanded(!expanded);
+	};
+
+	return (
+		<Box m={1.5}>
+			<Card className={classes.root}>
+				<CardHeader className={classes.header}
+					avatar={
+						<Avatar className={classes.avatar}>{rate}</Avatar>
+					}
+					action={
+						<IconButton aria-label="edit school" color="primary" onClick={handleEditOpen}>
+							<EditIcon />
+						</IconButton>
+						// <Button color="primary">Edit</Button>
+					}
+				/>
+				<EditSchool
+					name={name}
+					date={date}
+					todos={todos}
+					user={user}
+					editOpen={editOpen}
+					handleEditClose={handleEditClose}
+					
+				/>
+				<CardContent>
+					<Grid container spacing={2}>
+						<Grid item xs={3}>
+							<Typography className={classes.grid}>{name}</Typography>
+						</Grid>
+						<Grid item xs={6}>
+							<ProgressBar percent={percent} />
+							<Typography>{missing}</Typography>
+						</Grid>
+						<Grid item xs={3}>
+							<Typography variant="subtitle1">Upcoming Date:</Typography>
+							<Typography variant="subtitle1">{dateDisplay(date)}</Typography>
+						</Grid>
+					</Grid>
+				</CardContent>
+				<CardActions disableSpacing>
+					<IconButton
+						className={clsx(classes.expand, {
+							[classes.expandOpen]: expanded,
+						})}
+						onClick={handleExpandClick}
+						aria-expanded={expanded}
+						aria-label="show more">
+						<ExpandMoreIcon />
+					</IconButton>
+				</CardActions>
+
+				<Collapse in={expanded} timeout="auto">
+					<CardContent>
+						<h3>To-Do's:</h3>
+						<ToDoList todos={todos} user={user} fakeCheck={fakeCheck} />
+					</CardContent>
+				</Collapse>
+			</Card>
+		</Box>
+	);
 }

@@ -7,7 +7,7 @@ const checkUser = async (db, name) => {
         user = await new db.UserModel({ name }).save();
     }
     return user
-        .populate({ path: 'schools', populate: 'todos'})
+        .populate({ path: 'schools', populate: 'todos' })
         .execPopulate();
 }
 
@@ -35,6 +35,20 @@ const Mutation = {
             await newschool.save();
         }
         return newschool;
+    },
+
+    async updateSchool(parent, { user, school, date }, { db }, info) {
+        const key = makeSchoolKey(user, school );
+        try {
+            let school = await db.SchoolModel.findOne({ key });
+            school.deadline = date
+            await school.save()
+
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+        return true;
     },
 
     async completeSchool(parent, { key }, { db }, info) {
@@ -69,7 +83,7 @@ const Mutation = {
                     await newtodo.save();
                 }
             })
-        ).catch ((e) => console.log(e));
+        ).catch((e) => console.log(e));
         // console.log(newtodolist);
         schoolcard.todos.push(...newtodolist);
         await schoolcard.save();
@@ -129,7 +143,7 @@ const Mutation = {
                     await newcheckpoint.save();
                 }
             })
-        ).catch ((e) => console.log(e));
+        ).catch((e) => console.log(e));
         todo.checkpoints.push(...newcheckpointlist);
         await todo.save();
         pubsub.publish(`school ${owner}`, {
@@ -154,7 +168,7 @@ const Mutation = {
         return true;
     },
 
-    async completeCheckpoint(parent, { user, school, task, content }, { db }, info){
+    async completeCheckpoint(parent, { user, school, task, content }, { db }, info) {
         const key = makeCheckpointKey(user, school, task);
         try {
             let checkpoint = await db.CheckpointModel.findOne({ key, content });

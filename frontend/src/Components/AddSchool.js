@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import AddTodoLists from './AddTodoLists'
 import {
     Button, IconButton, Typography, TextField, Grid, Dialog,
@@ -9,10 +9,13 @@ import { withStyles } from '@material-ui/core/styles';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-import { setCalendarTime, convertTimeString } from '../utils'
+// import { setCalendarTime, convertTimeString } from '../utils'
 import SchoolIcon from '@material-ui/icons/School';
 import CloseIcon from '@material-ui/icons/Close';
-import { CREATE_USER_MUTATION, CREATE_SCHOOL_MUTATION, CREATE_TODO_MUTATION, CREATE_CHECKPOINT_MUTATION } from '../graphql';
+import {
+    // CREATE_USER_MUTATION, 
+    CREATE_SCHOOL_MUTATION, CREATE_TODO_MUTATION, CREATE_CHECKPOINT_MUTATION
+} from '../graphql';
 import { useMutation } from '@apollo/client';
 import { Time2String } from '../utils'
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +80,7 @@ const DialogActions = withStyles((theme) => ({
 
 /*********************************************************************** */
 
-export default function CustomizedDialogs({ open, handleClose }) {
+export default function CustomizedAddSchool({ open, handleClose }) {
     const classes = useStyles();
     const School_todos = [
         "Program Research", "Register", "Application Form",
@@ -87,6 +90,7 @@ export default function CustomizedDialogs({ open, handleClose }) {
     const defaultDeadline = new Date()
     let School = {
         name: "",
+        deadline: defaultDeadline,
         todos: []
     }
     const Todo = {
@@ -120,7 +124,7 @@ export default function CustomizedDialogs({ open, handleClose }) {
     // if (TodoLoading) console.log("TodoLoading")
     // if(TodoError) console.log("TodoError",TodoError)
     if (CheckpointLoading) console.log("CheckpointLoading")
-    if(CheckpointError) console.log("CheckpointError",CheckpointError)
+    if (CheckpointError) console.log("CheckpointError", CheckpointError)
 
     const handleMutation = async (addSchool) => {
         const owner = "emily" //modify later
@@ -218,7 +222,7 @@ export default function CustomizedDialogs({ open, handleClose }) {
             // todo.checkpoints.map((checkpoint) => {
             //     return checkpoint.time = Time2String(checkpoint.time)
             // })
-            todo.checkpoints= todo.checkpoints.map((checkpoint) => {
+            todo.checkpoints = todo.checkpoints.map((checkpoint) => {
                 checkpoint.time = Time2String(checkpoint.time)
                 return checkpoint
             })
@@ -233,7 +237,7 @@ export default function CustomizedDialogs({ open, handleClose }) {
 
         handleClose();
     }
-    const hOkBtnOnClick=() => {
+    const hOkBtnOnClick = () => {
         // problem here.
         console.log("click", school)
         handleAddSchool()
@@ -289,7 +293,7 @@ export default function CustomizedDialogs({ open, handleClose }) {
                         />
                     </Grid>
                 </DialogContent>
-                {console.log("rdr c_addschool:", school)}
+                {/* {console.log("rdr c_addschool:", school)} */}
                 <DialogActions>
                     <Button autoFocus onClick={hOkBtnOnClick}
                         color="primary" >

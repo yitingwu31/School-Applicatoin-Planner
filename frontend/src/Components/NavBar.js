@@ -18,7 +18,6 @@ const NavBar = () => {
     }
     // Add School
     const [addOpen, setAddOpen] = useState(false);
-    // const [editOpen, setEditOpen]=useState(false);
     // const [addSchool, setAddSchool] = useState({})
     const handleAddOpen = () => {
         setAddOpen(true);
