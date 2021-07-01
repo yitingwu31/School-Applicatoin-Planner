@@ -28,24 +28,24 @@ const App = () => {
 
   return (
     <div className="App">
-        <BrowserRouter>
-            <NavBar />
-            <Switch>
-            <Route exact path="/">
-            <Redirect to="/schools"/>
-            </Route>
-            <Route exact path="/schools">
-            <SchoolPage />
-            </Route>
-            <Route exact path="/calendar">
-            <CalendarPage />
-            </Route>
-            <Route exact path="/addSchool">
-            <AddSchool />
-            </Route>
-            </Switch>
-        </BrowserRouter>
-      {/* {signedIn ? (
+        {/* <BrowserRouter>
+              <NavBar />
+              <Switch>
+              <Route exact path="/">
+                <Redirect to="/schools"/>
+              </Route>
+                <Route exact path="/schools">
+                <SchoolPage />
+              </Route>
+              <Route exact path="/calendar">
+                <CalendarPage />
+              </Route>
+              <Route exact path="/addSchool">
+                <AddSchool />
+              </Route>
+              </Switch>
+          </BrowserRouter> */}
+      {signedIn ? (
           <BrowserRouter>
               <NavBar />
               <Switch>
@@ -68,11 +68,11 @@ const App = () => {
               user={user}
               setUser={setUser}
               setSignedIn={setSignedIn}
-              displayStatus={displayStatus}
           />
         )}
     </div>
   );
 }
+
 
 export default App;
