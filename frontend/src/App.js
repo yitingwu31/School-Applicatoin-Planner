@@ -1,7 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
-import { NavBar, AddSchool, Upcoming } from './Components'
-import { Schools, Calendar } from './Containers'
+import { NavBar, AddSchool } from './Components'
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import CalendarPage from './Containers/CalendarPage';
@@ -35,10 +34,10 @@ const App = () => {
                 <Redirect to="/schools"/>
               </Route>
                 <Route exact path="/schools">
-                <Schools />
+                <SchoolPage />
               </Route>
               <Route exact path="/calendar">
-                <Calendar />
+                <CalendarPage />
               </Route>
               <Route exact path="/addSchool">
                 <AddSchool />
