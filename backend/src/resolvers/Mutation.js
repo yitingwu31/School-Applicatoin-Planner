@@ -1,10 +1,10 @@
 import { makeSchoolKey, makeCheckpointKey } from "../utils";
 
-const checkUser = async (db, name) => {
+const checkUser = async (db, name, password) => {
     let user = await db.UserModel.findOne({ name });
     if (!user) {
         console.log("Creating user ", name);
-        user = await new db.UserModel({ name }).save();
+        user = await new db.UserModel({ name, password }).save();
     }
     return user
         .populate({ path: 'schools', populate: 'todos' })
@@ -12,12 +12,12 @@ const checkUser = async (db, name) => {
 }
 
 const Mutation = {
-    async createUser(parent, { name }, { db }, info) {
+    async createUser(parent, { name, password }, { db }, info) {
         let user = await db.UserModel.findOne({ name });
         if (user) {
             throw new Error("User already exists!");
         }
-        user = await new db.UserModel({ name }).save();
+        user = await new db.UserModel({ name, password }).save();
         return user;
     },
 

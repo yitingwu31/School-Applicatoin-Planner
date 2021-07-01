@@ -42,8 +42,11 @@ export const COMPLETE_CHECKPOINT_MUTATION = gql`
 
 
 export const CREATE_USER_MUTATION = gql`
-	mutation CreateUser($name: String){
-		createUser(name:$name)
+	mutation CreateUser($name: String, $password: String){
+		createUser(
+            name:$name,
+            password:$password
+        )
   }
 `;
 
