@@ -64,4 +64,6 @@
 ### 6/30 慈
 - use [moment.js](https://momentjs.com/) (./frontend/src/utlils.js) to format Date
 - `cd frontend` && `yarn add moment`
-- Frontend Mutation
+- Frontend Create & Update Mutation
+- Edit Button in School View
+- TBD: css improvement
