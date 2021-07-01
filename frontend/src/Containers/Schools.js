@@ -47,7 +47,6 @@ const Schools = () => {
 				document: SCHOOL_SUBSCRIPTION,
 				variables: { user: user },
 				updateQuery: (prev, { subscriptionData }) => {
-          // console.log("subscribe: ", subscriptionData)
 					if (!subscriptionData.data) return prev;
 					const newSchool = subscriptionData.data.school.data;
           let newlist = [];
@@ -59,7 +58,6 @@ const Schools = () => {
                 newlist.push(prev.userSchool[i]);
               }
             }
-            // console.log("newlist: ", newlist);
           } else {
             newlist = [newSchool, ...prev.userSchool];
           }
