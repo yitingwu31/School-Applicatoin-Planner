@@ -10,6 +10,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
+import { useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
+import { CREATE_USER_MUTATION, USER_QUERY } from '../graphql';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +41,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const SignIn = ({user, password}) => {
+  const [createUser, { loading: UserLoading, error: UserError }] = useMutation(CREATE_USER_MUTATION)
+  const { loading, error, data } = useQuery(USER_QUERY, {
+    variables: {
+        user: user,
+        password: password,
+    },
+    fetchPolicy: "network-only"
+  });
+
   const classes = useStyles();
   const [values, setValues] = React.useState({
     username: '',
@@ -57,12 +71,25 @@ const SignIn = ({user, password}) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  
+  const handleMutation = async (addUser) => {
+    // console.log("in handle mutation", addUser.username, addUser.password)
+    await createUser({
+        variables: {
+            name: addUser.username,
+            password: addUser.password,
+        }
+    })
+  }
+  
+  const handleAddUser = () => {
+    let addUser = values
+    handleMutation(addUser)
+  }
 
   const handleSignIn = () => {
     if (values.username !== "" && values.password !== ""){
-        // if the username exists, check if the password is correct
-        
-        // if the username doesn't exist (it's a new username), then create a new user
+        handleAddUser()
     }
     else{
         alert("Please enter your username or password");

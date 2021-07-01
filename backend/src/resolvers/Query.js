@@ -6,6 +6,7 @@ const findUser = async (name, db) => {
         return null;
     }
     return user
+        .populate('password')
         .populate('schools')
         .populate({ path: 'schools', populate: 'todos' })
         .populate({ path: 'schools', populate: { path: 'todos', populate: 'checkpoints' }})

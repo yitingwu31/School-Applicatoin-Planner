@@ -1,5 +1,5 @@
 type Mutation {
-    createUser(name: String!): User!
+    createUser(name: String!, password: String!): User!
     createSchool(data: CreateSchoolInput!): School!
     createTodo(owner: String!, school: String!, data: [CreateTodoInput]): [Todo]!
     createCheckpoint(owner: String!, school: String!, task: String!, data: [CreateCheckpointInput]): [Checkpoint]!
@@ -78,6 +78,7 @@ type School {
 type User {
     id: ID!
     name: String!
+    password: String!
     schools: [School!]
 }
 

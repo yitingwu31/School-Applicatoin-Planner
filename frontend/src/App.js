@@ -10,9 +10,11 @@ import { useState, useEffect } from "react";
 
 const App = () => {
   const LOCALSTORAGE_KEY = "save-user";
+  
   const savedUser = localStorage.getItem(LOCALSTORAGE_KEY);
   const [signedIn, setSignedIn] = useState(false);
   const [user, setUser] = useState(savedUser || "");
+  
   // show the corresponded history data of the user
   const displayStatus = (payload) => {
 
@@ -20,13 +22,30 @@ const App = () => {
 
   useEffect(() => {
     if (signedIn) {
-        localStorage.setItem(LOCALSTORAGE_KEY, user);
+      localStorage.setItem(LOCALSTORAGE_KEY, user);
     }
   }, [signedIn, user]);
 
   return (
     <div className="App">
-      {true ? (
+        <BrowserRouter>
+            <NavBar />
+            <Switch>
+            <Route exact path="/">
+            <Redirect to="/schools"/>
+            </Route>
+            <Route exact path="/schools">
+            <SchoolPage />
+            </Route>
+            <Route exact path="/calendar">
+            <CalendarPage />
+            </Route>
+            <Route exact path="/addSchool">
+            <AddSchool />
+            </Route>
+            </Switch>
+        </BrowserRouter>
+      {/* {signedIn ? (
           <BrowserRouter>
               <NavBar />
               <Switch>
@@ -51,7 +70,7 @@ const App = () => {
               setSignedIn={setSignedIn}
               displayStatus={displayStatus}
           />
-        )}
+        )} */}
     </div>
   );
 }

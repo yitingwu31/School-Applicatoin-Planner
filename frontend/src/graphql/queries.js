@@ -62,3 +62,19 @@ export const UPCOMING_QUERY = gql`
         }
     }
 `;
+
+export const USER_QUERY = gql`
+    query user (
+        $user: String!
+    ) {
+        user (
+            user: $user
+            password: $ password
+        ) {
+            id
+            name
+            password
+            schools
+        }
+    }
+`;
