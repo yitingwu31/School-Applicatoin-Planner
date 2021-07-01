@@ -6,8 +6,6 @@ import { compareTime } from '../utils';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
-let user = 'emily'
-
 const font = ['Quicksand', 'sans-serif'].join(',');
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Schools = () => {
+const Schools = ({ user }) => {
   const classes = useStyles();
   const [schools, setSchools] = useState([]);
   const { loading, error, data, subscribeToMore } = useQuery(USER_SCHOOL_QUERY, {

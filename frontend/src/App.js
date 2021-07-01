@@ -13,7 +13,7 @@ const App = () => {
   
   const savedUser = localStorage.getItem(LOCALSTORAGE_KEY);
   const [signedIn, setSignedIn] = useState(false);
-  const [user, setUser] = useState(savedUser || "");
+  const [user, setUser] = useState(savedUser || "emily");
   
   // show the corresponded history data of the user
   const displayStatus = (payload) => {
@@ -28,24 +28,7 @@ const App = () => {
 
   return (
     <div className="App">
-        {/* <BrowserRouter>
-              <NavBar />
-              <Switch>
-              <Route exact path="/">
-                <Redirect to="/schools"/>
-              </Route>
-                <Route exact path="/schools">
-                <SchoolPage />
-              </Route>
-              <Route exact path="/calendar">
-                <CalendarPage />
-              </Route>
-              <Route exact path="/addSchool">
-                <AddSchool />
-              </Route>
-              </Switch>
-          </BrowserRouter> */}
-      {signedIn ? (
+      {true ? (
           <BrowserRouter>
               <NavBar />
               <Switch>
@@ -53,10 +36,10 @@ const App = () => {
                 <Redirect to="/schools"/>
               </Route>
                 <Route exact path="/schools">
-                <SchoolPage />
+                <SchoolPage user={user}/>
               </Route>
               <Route exact path="/calendar">
-                <CalendarPage />
+                <CalendarPage user={user}/>
               </Route>
               <Route exact path="/addSchool">
                 <AddSchool />

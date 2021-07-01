@@ -122,7 +122,7 @@ export default function CustomizedAddSchool({ open, handleClose }) {
     if (CheckpointError) console.log("CheckpointError", CheckpointError)
 
     const handleMutation = async (addSchool) => {
-        const owner = "emily" //modify later
+        const owner = "emily"; //modify later
         //await 
         await createSchool({
             variables: {
