@@ -13,6 +13,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import SchoolIcon from '@material-ui/icons/School';
 import CloseIcon from '@material-ui/icons/Close';
 import {
+    CREATE_TODO_MUTATION, CREATE_CHECKPOINT_MUTATION,
     UPDATE_SCHOOL_MUTATION, UPDATE_TODO_MUTATION, UPDATE_CHECKPOINT_MUTATION
 } from '../graphql';
 import { useMutation } from '@apollo/client';
@@ -133,6 +134,8 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
     const [updateSchool, { loading: SchoolLoading, error: SchoolError }] = useMutation(UPDATE_SCHOOL_MUTATION)
     const [updateTodo, { loading: TodoLoading, error: TodoError }] = useMutation(UPDATE_TODO_MUTATION)
     const [updateCheckpoint, { loading: CheckpointLoading, error: CheckpointError }] = useMutation(UPDATE_CHECKPOINT_MUTATION)
+    const [createTodo, { loading: crTodoLoading, error: crTodoError }] = useMutation(CREATE_TODO_MUTATION)
+    const [createCheckpoint, { loading: crCheckpointLoading, error: crCheckpointError }] = useMutation(CREATE_CHECKPOINT_MUTATION)
 
     if (SchoolLoading) console.log("SchoolLoading")
     if (SchoolError) console.log("SchoolError: ", JSON.stringify(SchoolError, null, 2))
@@ -147,59 +150,6 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
         }
         else {
             return false
-        }
-    }
-    const handleMutation = async () => {
-        const addSchool = { ...school }
-        let updateDate = ""
-        if (DatetypeIsNotString(addSchool.deadline)) {
-            // console.log("update school date")
-            updateDate = Time2String(addSchool.deadline)
-            await updateSchool({
-                variables: {
-                    user: user,
-                    school: name,
-                    date: updateDate
-                }
-            })
-                .then((result) => console.log(result))
-                .catch((e) => console.log("catch e in update: ", e))
-        }
-        //const user = "emily" //modify later
-
-        for (let i = 0; i < addSchool.todos.length; i++) {
-            let addTodo = { ...addSchool.todos[i] }
-            if (DatetypeIsNotString(addTodo.deadline)) {
-                // console.log("update todo date")
-                updateDate = Time2String(addTodo.deadline)
-                await updateTodo({
-                    variables: {
-                        user: user,
-                        school: name,
-                        task: addTodo.task,
-                        date: updateDate,
-                    }
-                })
-            }
-
-            for (let j = 0; j < addTodo.checkpoints.length; j++) {
-                let addCheckpoint = { ...addTodo.checkpoints[j] }
-                //console.log("addCheckpoint",addCheckpoint)
-                // console.log("update checkpoint date")
-                if (DatetypeIsNotString(addCheckpoint.time)) {
-                    updateDate = Time2String(addCheckpoint.time)
-                    await updateCheckpoint({
-                        variables: {
-                            user: user,
-                            school: name,
-                            task: addTodo.task,
-                            content: addCheckpoint.content,
-                            date: updateDate,
-                        }
-                    })
-
-                }
-            }
         }
     }
 
@@ -232,6 +182,104 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
         // the school state is correct for sure.
         // console.log("school in handlesettodo:", school)
     }
+    const handleMutation = async (addSchool) => {
+        //const addSchool = { ...school }
+        // console.log("school in handleMutation(edit.js):", school)
+        // console.log("nxtschool in handleMutation(edit.js):", addSchool)
+        // console.log("query todos:", todos)
+
+        let updateDate = ""
+        //create mutation
+        if (todos.length < addSchool.todos.length) {
+
+            for (let i = 0; i < addSchool.todos.length; i++) {
+                if (!todos.includes(addSchool.todos[i])) {
+                    let addTodo = { ...addSchool.todos[i] }
+                    if (DatetypeIsNotString(addTodo.deadline)){
+                        updateDate=Time2String(addTodo.deadline)
+                    }
+                    await createTodo({
+                        variables: {
+                            owner: user,
+                            school: addSchool.name,
+                            task: addTodo.task,
+                            name: addSchool.name,
+                            deadline: updateDate,
+                            comment: addTodo.comment
+                        }
+                    })
+                   
+                    for (let j = 0; j < addTodo.checkpoints.length; j++) {
+                        let addCheckpoint = { ...addTodo.checkpoints[j] }
+                        if (DatetypeIsNotString(addCheckpoint.time)) {
+                            updateDate = Time2String(addCheckpoint.time)
+                        }
+                        await createCheckpoint({
+                            variables: {
+                                owner: user,
+                                school: addSchool.name,
+                                task: addTodo.task,
+                                content: addCheckpoint.content,
+                                time: updateDate
+                            }
+                        })
+                    }
+                }
+
+            }
+        }
+
+        
+        if (DatetypeIsNotString(addSchool.deadline)) {
+            // console.log("update school date")
+            updateDate = Time2String(addSchool.deadline)
+            await updateSchool({
+                variables: {
+                    user: user,
+                    school: name,
+                    date: updateDate
+                }
+            })
+        }
+        //const user = "emily" //modify later
+
+        for (let i = 0; i < addSchool.todos.length; i++) {
+            let uTodo = { ...addSchool.todos[i] }
+
+            if (DatetypeIsNotString(uTodo.deadline)) {
+                // console.log("update todo date")
+                updateDate = Time2String(uTodo.deadline)
+                await updateTodo({
+                    variables: {
+                        user: user,
+                        school: name,
+                        task: uTodo.task,
+                        date: updateDate,
+                    }
+                })
+            }
+
+            for (let j = 0; j < uTodo.checkpoints.length; j++) {
+                let uCheckpoint = { ...uTodo.checkpoints[j] }
+                //console.log("updateCheckpoint",updateCheckpoint)
+                // console.log("update checkpoint date")
+                if (DatetypeIsNotString(uCheckpoint.time)) {
+                    updateDate = Time2String(uCheckpoint.time)
+                    await updateCheckpoint({
+                        variables: {
+                            user: user,
+                            school: name,
+                            task: uTodo.task,
+                            content: uCheckpoint.content,
+                            date: updateDate,
+                        }
+                    })
+
+                }
+            }
+        }
+    }
+
 
     const handleAddSchool = () => {
         /*
@@ -243,7 +291,7 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
 
         // addSchool is the school object prepaired upload to backend.
         let addSchool = { ...school }
-        // console.log("school in handleAddSchool", school)
+        // console.log("school in handleAddSchool(edit)", school)
         let nxtSchoolnxtTodoS = [...school.todos]
         let addSchoolNxtTodoS = []
         // filter checked todo
@@ -253,23 +301,27 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
 
             }
         }
-        //format date
-        addSchool.deadline = Time2String(addSchool.deadline)
-        addSchoolNxtTodoS.map((todo) => {
-            // todo.checkpoints.map((checkpoint) => {
-            //     return checkpoint.time = Time2String(checkpoint.time)
-            // })
-            todo.checkpoints = todo.checkpoints.map((checkpoint) => {
-                checkpoint.time = Time2String(checkpoint.time)
-                return checkpoint
-            })
-            return todo.deadline = Time2String(todo.deadline)
-        })
+
+
+
+        // //format date
+        // addSchool.deadline = Time2String(addSchool.deadline)
+        // addSchoolNxtTodoS.map((todo) => {
+        //     // todo.checkpoints.map((checkpoint) => {
+        //     //     return checkpoint.time = Time2String(checkpoint.time)
+        //     // })
+        //     todo.checkpoints = todo.checkpoints.map((checkpoint) => {
+        //         checkpoint.time = Time2String(checkpoint.time)
+        //         return checkpoint
+        //     })
+        //     return todo.deadline = Time2String(todo.deadline)
+        // })
 
 
         // addSchool.name = schoolNameRef.current.value
         addSchool.todos = addSchoolNxtTodoS
-        console.log("nxt addSchool prototype: ", addSchool)
+        handleMutation(addSchool)
+        // console.log("nxt addSchool prototype: ", addSchool)
         // handleMutation()
         // setSchool(addSchool);
 
@@ -283,8 +335,8 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
         // console.log("schooldatetype", school.deadline, typeof (school.deadline), DatetypeIsString(school.deadline))
         // console.log("tododatetype:", school.todos[0].deadline, typeof (school.todos[0].deadline), DatetypeIsString(school.todos[0].deadline))
         // console.log("checkpointdatetype:", school.todos[0].checkpoints[0].time, typeof (school.todos[0].checkpoints[0].time), DatetypeIsString(school.todos[0].checkpoints[0].time))
-        // handleAddSchool()
-        handleMutation()
+        handleAddSchool()
+        // handleMutation()
         handleEditClose()
     }
 
@@ -302,7 +354,8 @@ export default function CustomizedEditSchool({ name, date, todos, user, editOpen
                                 <SchoolIcon />
                             </Grid>
                             <Grid item>
-                                <Typography id="input-with-icon-grid" label="School Name">{name}</Typography>
+                                <TextField disabled id="standard-disabled" label="School Name" defaultValue={name} />
+
                             </Grid>
                             <Grid item >
                                 <DatePicker

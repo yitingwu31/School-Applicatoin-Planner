@@ -31,12 +31,18 @@ export default function AddTodoLists({ todos, school, setSchool, checked, setChe
 
         */
         let nxtSchool = { ...school }
-        let value = ""
         if (event.keyCode === 13) {
-            value = addTodoRef.current.value
+            let newTask =  addTodoRef.current.value
+            const newTodo = {
+                task: newTask,
+                deadline: defaultDeadline,
+                comment: "",
+                checkpoints: [],
+            };
             let newTodos = [...school.todos]
-            newTodos.push(value)
+            newTodos.push(newTodo)
             nxtSchool.todos = [...newTodos]
+            // console.log("handleAddTodo,", nxtSchool)
             setSchool(nxtSchool)
             addTodoRef.current.value = ""
         }

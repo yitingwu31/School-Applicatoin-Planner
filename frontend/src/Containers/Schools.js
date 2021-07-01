@@ -36,6 +36,7 @@ const Schools = () => {
       const schoolList = data.userSchool;
       let sortedSchools = schoolList.slice();
       sortedSchools.sort((a, b) => compareTime(a, b));
+      console.log('sortedSchools in School.js: ',sortedSchools)
       setSchools(sortedSchools);
     }
   }, [data]);

@@ -206,14 +206,13 @@ export default function CustomizedAddSchool({ open, handleClose }) {
 
         // addSchool is the school object prepaired upload to backend.
         let addSchool = { ...school }
-        // console.log("school in handleAddSchool", school)
+        console.log("school in handleAddSchool", school)
         const nxtSchoolnxtTodoS = [...school.todos]
         let addSchoolNxtTodoS = []
         // filter checked todo
         for (let i = 0; i < nxtSchoolnxtTodoS.length; i++) {
             if (checked.includes(nxtSchoolnxtTodoS[i].task)) {
                 addSchoolNxtTodoS.push(nxtSchoolnxtTodoS[i])
-
             }
         }
         //format date
