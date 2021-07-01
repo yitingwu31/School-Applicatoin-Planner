@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -19,6 +18,8 @@ import { dateDisplay, missingDisplay } from '../utils';
 import { useMutation } from '@apollo/client';
 import { COMPLETE_SCHOOL_MUTATION } from '../graphql';
 
+// const font = ['Libre Baskerville', 'serif', 'Quicksand', 'sans-serif'].join(',');
+const font = ['Quicksand', 'sans-serif'].join(',');
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,10 +45,20 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     padding: theme.spacing(2),
     textAlign: 'center',
+    fontFamily: font,
+    fontSize: '24px',
+    color: 'black',
+    fontWeight: '500'
   },
   avatar: {
     backgroundColor: '#FAD02C',
   },
+  item: {
+    fontFamily: font,
+    fontSize: '18px',
+    color: 'black',
+    fontWeight: '400'
+  }
 }));
 
 
@@ -98,7 +109,6 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
 
   const fakeCheck = (task) => {
     let arr = missing.split(': ').join(', ').split(', ');
-    // console.log(arr);
     let ret = '';
     for (let i = 1; i < arr.length; i++) {
       if (arr[i] !== task) {
@@ -136,11 +146,11 @@ export default function SchoolCard({key, name, date, todos, rate, user, complete
             </Grid>
             <Grid item xs={6}>
                 <ProgressBar percent={percent}/>
-                <Typography>{missing}</Typography>
+                <Typography className={classes.item}>{missing}</Typography>
             </Grid>
             <Grid item xs={3}>
-                <Typography variant="subtitle1">Upcoming Date:</Typography>
-                <Typography variant="subtitle1">{dateDisplay(date)}</Typography>
+                <Typography variant="subtitle1" className={classes.item}>Upcoming Date:</Typography>
+                <Typography variant="subtitle1" className={classes.item}>{dateDisplay(date)}</Typography>
             </Grid>
         </Grid>
       </CardContent>

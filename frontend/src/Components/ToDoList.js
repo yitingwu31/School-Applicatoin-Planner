@@ -10,6 +10,7 @@ import { useMutation } from '@apollo/client';
 import { COMPLETE_TODO_MUTATION } from '../graphql';
 import { dateDisplay } from '../utils';
 
+const font = ['Libre Baskerville', 'serif', 'Quicksand', 'sans-serif'].join(',');
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +20,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto'
   },
+  itemText: {
+    fontFamily: font,
+    fontSize: "13px"
+  }
 }));
 
 export default function CheckboxListSecondary({ todos, user, fakeCheck }) {
@@ -71,7 +76,7 @@ export default function CheckboxListSecondary({ todos, user, fakeCheck }) {
         return (
           <div>
           <ListItem key={index} button>
-            <ListItemText id={labelId} primary={todo.task} secondary={dateDisplay(todo.deadline)}/>
+            <ListItemText className={classes.itemText} id={labelId} primary={todo.task} secondary={dateDisplay(todo.deadline)}/>
             <ListItemSecondaryAction>
               <Checkbox
                 edge="end"
