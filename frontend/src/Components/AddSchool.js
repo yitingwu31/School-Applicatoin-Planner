@@ -118,10 +118,6 @@ export default function CustomizedAddSchool({ open, handleClose }) {
     const [createTodo, { loading: TodoLoading, error: TodoError }] = useMutation(CREATE_TODO_MUTATION)
     const [createCheckpoint, { loading: CheckpointLoading, error: CheckpointError }] = useMutation(CREATE_CHECKPOINT_MUTATION)
 
-    // if (SchoolLoading) console.log("SchoolLoading")
-    // if(SchoolError) console.log("SchoolError",JSON.stringify(SchoolError, null, 2))
-    // if (TodoLoading) console.log("TodoLoading")
-    // if(TodoError) console.log("TodoError",TodoError)
     if (CheckpointLoading) console.log("CheckpointLoading")
     if (CheckpointError) console.log("CheckpointError", CheckpointError)
 

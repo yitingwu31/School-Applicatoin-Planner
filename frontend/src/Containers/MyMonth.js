@@ -1,8 +1,7 @@
 import { startOfMonth, getMonth, getYear } from 'date-fns';
 import { useEffect, useState } from 'react';
 import {
-  MonthlyCalendar,
-  MonthlyNav
+  MonthlyCalendar
 } from '@zach.codes/react-calendar';
 
 import MyMonthlyBody from '../Components/MyMonthlyBody';
@@ -31,7 +30,6 @@ const MyMonth = () => {
       currentMonth={currentMonth}
       onCurrentMonthChange={date => onMonthChange(date)}
     >
-      {/* <MonthlyNav /> */}
       <MyMonthNav />
       <MyMonthlyBody user={user} year={year} month={month}/>
     </MonthlyCalendar>

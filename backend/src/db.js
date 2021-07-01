@@ -3,7 +3,7 @@ const { Schema } = require('mongoose');
 
 const userSchema = new Schema({
     name: { type: String, required: true },
-    // password: {  }
+    password: { type: String },
     schools: [{ type: mongoose.Types.ObjectId, ref: 'School' }],
 });
 

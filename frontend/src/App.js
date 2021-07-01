@@ -1,7 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
-import { NavBar, AddSchool, Upcoming } from './Components'
-import { Schools, Calendar } from './Containers'
+import { NavBar, AddSchool } from './Components'
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import CalendarPage from './Containers/CalendarPage';
@@ -11,9 +10,11 @@ import { useState, useEffect } from "react";
 
 const App = () => {
   const LOCALSTORAGE_KEY = "save-user";
+  
   const savedUser = localStorage.getItem(LOCALSTORAGE_KEY);
-  const [signedIn, setSignedIn] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
   const [user, setUser] = useState(savedUser || "");
+  
   // show the corresponded history data of the user
   const displayStatus = (payload) => {
 
@@ -27,32 +28,49 @@ const App = () => {
 
   return (
     <div className="App">
-      {signedIn ? (
         <BrowserRouter>
-          <NavBar />
-          <Switch>
-            <Route exact path="/">
-              <Redirect to="/schools" />
-            </Route>
-            <Route exact path="/schools">
-              <Schools />
-            </Route>
-            <Route exact path="/calendar">
-              <Calendar />
-            </Route>
-            <Route exact path="/addSchool">
-              <AddSchool />
-            </Route>
-          </Switch>
-        </BrowserRouter>
-      ) : (
-        <SignIn
-          user={user}
-          setUser={setUser}
-          setSignedIn={setSignedIn}
-          displayStatus={displayStatus}
-        />
-      )}
+              <NavBar />
+              <Switch>
+              <Route exact path="/">
+                <Redirect to="/schools"/>
+              </Route>
+                <Route exact path="/schools">
+                <SchoolPage />
+              </Route>
+              <Route exact path="/calendar">
+                <CalendarPage />
+              </Route>
+              <Route exact path="/addSchool">
+                <AddSchool />
+              </Route>
+              </Switch>
+          </BrowserRouter>
+      {/* {signedIn ? (
+          <BrowserRouter>
+              <NavBar />
+              <Switch>
+              <Route exact path="/">
+                <Redirect to="/schools"/>
+              </Route>
+                <Route exact path="/schools">
+                <SchoolPage />
+              </Route>
+              <Route exact path="/calendar">
+                <CalendarPage />
+              </Route>
+              <Route exact path="/addSchool">
+                <AddSchool />
+              </Route>
+              </Switch>
+          </BrowserRouter>
+        ) : (
+          <SignIn
+              user={user}
+              setUser={setUser}
+              setSignedIn={setSignedIn}
+              displayStatus={displayStatus}
+          />
+        )} */}
     </div>
   );
 }

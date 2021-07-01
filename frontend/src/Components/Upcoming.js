@@ -35,17 +35,20 @@ const Upcoming = ({ user="emily" }) => {
     const [upcoming, setUpcoming] = useState([]);
 
     useEffect(() => {
-        const day = new Date();
-        let newweekstr = [];
-        newweekstr.push(Time2String(day));
-        for (let i = 1; i < 7; i++) {
-            day.setDate(day.getDate() + 1);
+        function setWeek() {
+            const day = new Date();
+            let newweekstr = [];
             newweekstr.push(Time2String(day));
+            for (let i = 1; i < 7; i++) {
+                day.setDate(day.getDate() + 1);
+                newweekstr.push(Time2String(day));
+            }
+            setWeestr([...newweekstr]);
         }
-        setWeestr([...newweekstr]);
+        setWeek();
     }, [user])
 
-    const { loading, error, data, subscribeToMore } = useQuery(UPCOMING_QUERY, {
+    const { loading, error, data } = useQuery(UPCOMING_QUERY, {
         variables: {
             user: user,
             dates: weekstr
@@ -53,14 +56,17 @@ const Upcoming = ({ user="emily" }) => {
     })
 
     useEffect(() => {
-        if (loading) console.log("Loading upcoming...");
-        if (error) console.log("Error upcoming: ", error);
-        if (!loading && !error) {
-            console.log("upcoming query done!");
-            const uplist = data.allInWeek;
-            console.log(uplist)
-            setUpcoming([...uplist]);
+        function setComing() {
+            if (loading) console.log("Loading upcoming...");
+            if (error) console.log("Error upcoming: ", error);
+            if (!loading && !error) {
+                console.log("upcoming query done!");
+                const uplist = data.allInWeek;
+                console.log(uplist)
+                setUpcoming([...uplist]);
+            }
         }
+        setComing();
     }, [data])
 
     const getIcon = (type) => {

@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 const MyMonthlyBody = ({ user, year, month }) => {
     const [events, setEvents] = useState([]);
-    const { loading, error, data, subscribeToMore } = useQuery(CALENDARMONTH_QUERY, {
+    const { loading, error, data } = useQuery(CALENDARMONTH_QUERY, {
         variables: {
             user: user,
             year: year,
@@ -24,9 +24,12 @@ const MyMonthlyBody = ({ user, year, month }) => {
             console.log("calendar query done!");
             const tasklist = data.allByDate;
             let newEvents = [];
-            tasklist.map((row) => {
-                newEvents.push({ title: row.context, date: setCalendarTime(row.deadline), completed: row.completed })
-            })
+            for (let i = 0; i < tasklist.length; i++) {
+                newEvents.push({ title: tasklist[i].context, date: setCalendarTime(tasklist[i].deadline), completed: tasklist[i].completed });
+            }
+            // tasklist.map((row) => {
+            //     newEvents.push({ title: row.context, date: setCalendarTime(row.deadline), completed: row.completed })
+            // })
             setEvents(newEvents);
         }
     }, [data])
