@@ -42,17 +42,21 @@ export const COMPLETE_CHECKPOINT_MUTATION = gql`
 
 
 export const CREATE_USER_MUTATION = gql`
-	mutation CreateUser($name: String, $password: String){
-		createUser(
-            name:$name,
-            password:$password
+	mutation CreateUser(
+                $name: String,
+                $password: String
         ){
+		createUser(
+            data:{
+				name:$name,
+                password:$password
+		}){
             id
             name
             password
             schools
         }
-  }
+    }
 `;
 
 export const CREATE_SCHOOL_MUTATION = gql`
