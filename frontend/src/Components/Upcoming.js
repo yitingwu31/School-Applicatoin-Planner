@@ -12,16 +12,21 @@ import { useQuery } from '@apollo/client';
 import { Time2String, dateDisplay } from '../utils';
 import { UPCOMING_QUERY } from '../graphql';
 
+const font = ['Quicksand', 'sans-serif'].join(',');
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: '100%',
+        height: '60px',
+        paddingTop: '15px',
+        fontSize: '25px',
+        fontFamily: font
+    },
+    lists: {
+      width: '80%',
       maxWidth: '36ch',
       backgroundColor: theme.palette.background.paper,
-    },
-    inline: {
-      display: 'inline',
-    },
+      fontFamily: font
+    }
 }));
 
 const Upcoming = ({ user="emily" }) => {
@@ -68,7 +73,7 @@ const Upcoming = ({ user="emily" }) => {
     )
     :
     (
-        <List className={classes.root}>
+        <List className={classes.lists}>
             {upcoming.map((task) => (
                 <div>
                 <ListItem >
@@ -87,8 +92,8 @@ const Upcoming = ({ user="emily" }) => {
     );
 
     return (
-        <div>
-            <Typography>
+        <div >
+            <Typography className={classes.root}>
                 Upcoming This Week...
             </Typography>
             {display}
