@@ -13,7 +13,9 @@ const checkUser = async (db, name, password) => {
 
 const Mutation = {
     async createUser(parent, { name, password }, { db }, info) {
+        console.log(name,password)
         let user = await db.UserModel.findOne({ name });
+        console.log(user)
         // if (user) {
         //     throw new Error("User already exists!");
         // }

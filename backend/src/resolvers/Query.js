@@ -2,6 +2,7 @@ import { missingDisplay, checkDeadline, checkDeadlineWeek } from "../utils";
 
 const findUser = async (name, db) => {
     const user = await db.UserModel.findOne({ name });
+    console.log("findUser:",user)
     if (!user) {
         return null;
     }
@@ -63,7 +64,8 @@ const findCheckpointWeek = async (user, dates, db) => {
 
 const Query = {
     async user(parent, { name, password }, { db }, info) {
-        const user = findUser(name, db)
+        const user = await findUser(name, db)
+        console.log(user)
         if (user !== null) {
             //Checking password
             if (user.password === password) {
