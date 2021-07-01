@@ -77,7 +77,7 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 
 	const [missing, setMissing] = useState();
 	const [percent, setPercent] = useState(0);
-  const [fakeMissings, setFakeMissings] = useState([]);
+  	const [fakeMissings, setFakeMissings] = useState([]);
 	const [completeSchool] = useMutation(COMPLETE_SCHOOL_MUTATION);
 
 	useEffect(() => {
@@ -104,7 +104,7 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 
 	const findMissing = (todos) => {
 		let missing = todos.filter((todo) => todo.completed === false);
-    setFakeMissings(missing);
+    	setFakeMissings(missing);
 		const per = Math.round((todos.length - missing.length) / todos.length * 100);
 		setPercent(per);
 		if (missing.length === 0) {
@@ -119,16 +119,17 @@ export default function SchoolCard({ key, name, date, todos, rate, user, complet
 	}
 
 	const fakeCheck = (task) => {
-    let ret = '';
-    for (let i = 0; i < fakeMissings.length; i++) {
-      if (fakeMissings[i].task === task) {
-        fakeMissings.splice(i,1);
-      } else {
-        ret = ret.concat(`${missingDisplay(fakeMissings[i].task)}, `);
-      }
-    }
+		let ret = '';
+		for (let i = 0; i < fakeMissings.length; i++) {
+			if (fakeMissings[i].task === task) {
+				fakeMissings.splice(i,1);
+			} else {
+				ret = ret.concat(`${missingDisplay(fakeMissings[i].task)}, `);
+			}
+		}
 		ret = ret === '' ? "All done!" : ret.slice(0, -2);
-    setPercent(Math.round((todos.length - fakeMissings.length) / todos.length * 100));
+		setMissing(ret);
+		setPercent(Math.round((todos.length - fakeMissings.length) / todos.length * 100));
 	}
 
 	return (
