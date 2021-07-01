@@ -3,6 +3,7 @@ type Mutation {
     createSchool(data: CreateSchoolInput!): School!
     createTodo(owner: String!, school: String!, data: [CreateTodoInput]): [Todo]!
     createCheckpoint(owner: String!, school: String!, task: String!, data: [CreateCheckpointInput]): [Checkpoint]!
+    updateSchool(user: String!, school: String!, date: String!): Boolean!
     updateTodo(user: String!, school: String!, task: String!, date: String!): Boolean!
     updateCheckpoint(user: String!, school: String!, task: String!, content: String!, date: String!): Boolean!
     completeSchool(key: String!): Boolean!

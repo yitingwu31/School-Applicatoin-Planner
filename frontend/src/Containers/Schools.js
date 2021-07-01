@@ -40,42 +40,41 @@ const Schools = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log("catch subscription!")
-    try {
-      subscribeToMore({
-        document: SCHOOL_SUBSCRIPTION,
-        variables: { user: user },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev;
-          const newSchool = subscriptionData.data.school.data;
-          let newlist = [];
-          let same = false;
-          for (let i = 0; i < prev.userSchool.length; i++) {
-            if (prev.userSchool[i].name === newSchool.name) {
-              newlist.push(newSchool);
-              same = true;
-            } else {
-              newlist.push(prev.userSchool[i]);
-            }
-          }
-          
+	useEffect(() => {
+		console.log("catch subscription!")
+		try {
+			subscribeToMore({
+				document: SCHOOL_SUBSCRIPTION,
+				variables: { user: user },
+				updateQuery: (prev, { subscriptionData }) => {
+					if (!subscriptionData.data) return prev;
+					const newSchool = subscriptionData.data.school.data;
+					let newlist = [];
+					let same = false;
+					for (let i = 0; i < prev.userSchool.length; i++) {
+						if (prev.userSchool[i].name === newSchool.name) {
+							newlist.push(newSchool);
+							same = true;
+						} else {
+							newlist.push(prev.userSchool[i]);
+						}
+					}
           if (same) {
-            setSchools([...newlist]);
-          } else {
-            newlist = [newSchool, ...prev.userSchool];
-            setSchools([...newlist]);
-          }
-          
-          
-          return {
-            ...prev,
-            schools: [...newlist],
-          }
-        }
-      })
-    } catch(e) { console.log(e) }
-  }, [subscribeToMore]);
+						setSchools([...newlist]);
+					} else {
+						newlist = [newSchool, ...prev.userSchool];
+						setSchools([...newlist]);
+					}
+
+
+					return {
+						...prev,
+						schools: [...newlist],
+					}
+				}
+			})
+		} catch (e) { console.log(e) }
+	}, [subscribeToMore]);
 
   return (
       <div className='Calendar'>

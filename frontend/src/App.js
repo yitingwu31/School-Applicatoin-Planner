@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import { NavBar, AddSchool } from './Components'
 import { Schools, Calendar } from './Containers'
