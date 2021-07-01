@@ -193,7 +193,7 @@ export default function CustomizedAddSchool({ open, handleClose }) {
         // console.log("handleSetTodo nxtschool: ", index, nxtSchool)
         setSchool(nxtSchool)
         // the school state is correct for sure.
-        console.log("school in handlesettodo:", school)
+        // console.log("school in handlesettodo:", school)
     }
 
     const handleAddSchool = () => {
@@ -206,7 +206,7 @@ export default function CustomizedAddSchool({ open, handleClose }) {
 
         // addSchool is the school object prepaired upload to backend.
         let addSchool = { ...school }
-        console.log("school in handleAddSchool", school)
+        // console.log("school in handleAddSchool", school)
         const nxtSchoolnxtTodoS = [...school.todos]
         let addSchoolNxtTodoS = []
         // filter checked todo
@@ -231,7 +231,7 @@ export default function CustomizedAddSchool({ open, handleClose }) {
 
         addSchool.name = schoolNameRef.current.value
         addSchool.todos = addSchoolNxtTodoS
-        console.log("nxt addSchool prototype: ", addSchool)
+        // console.log("nxt addSchool prototype: ", addSchool)
         handleMutation(addSchool)
         // setSchool(addSchool);
 
@@ -239,7 +239,7 @@ export default function CustomizedAddSchool({ open, handleClose }) {
     }
     const hOkBtnOnClick = () => {
         // problem here.
-        console.log("click", school)
+        // console.log("click", school)
         handleAddSchool()
         handleClose()
     }
