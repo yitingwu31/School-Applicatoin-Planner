@@ -47,25 +47,24 @@ const Schools = () => {
 				document: SCHOOL_SUBSCRIPTION,
 				variables: { user: user },
 				updateQuery: (prev, { subscriptionData }) => {
+          console.log("subscribe: ", subscriptionData)
 					if (!subscriptionData.data) return prev;
 					const newSchool = subscriptionData.data.school.data;
-					let newlist = [];
-					let same = false;
-					for (let i = 0; i < prev.userSchool.length; i++) {
-						if (prev.userSchool[i].name === newSchool.name) {
-							newlist.push(newSchool);
-							same = true;
-						} else {
-							newlist.push(prev.userSchool[i]);
-						}
-					}
-          if (same) {
-						setSchools([...newlist]);
-					} else {
-						newlist = [newSchool, ...prev.userSchool];
-						setSchools([...newlist]);
-					}
-
+          let newlist = [];
+          if (subscriptionData.data.school.mutation === 'UPDATED') {
+            for (let i = 0; i < prev.userSchool.length; i++) {
+              if (prev.userSchool[i].name === newSchool.name) {
+                newlist.push(newSchool);
+              } else {
+                newlist.push(prev.userSchool[i]);
+              }
+            }
+            console.log("newlist: ", newlist);
+          } else {
+            newlist = [newSchool, ...prev.userSchool];
+          }
+          newlist.sort((a, b) => compareTime(a, b));
+          setSchools([...newlist]);
 
 					return {
 						...prev,
