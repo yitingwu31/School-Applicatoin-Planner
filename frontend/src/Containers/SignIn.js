@@ -85,10 +85,11 @@ const SignIn = ({ setUser, setSignedIn }) => {
 			})
 			await refetch()
 			if (error) console.log("query error: ", JSON.stringify(error, null, 2))
-			console.log("refetchdata", data.user)
+			// console.log("refetchdata", data.user)
 
-			console.log("data.username", data.user.name, "addUser.username", addUser.username)
-			console.log('data.password', data.user.password, "addUser.password", addUser.password)
+			// console.log("data.username", data.user.name, "addUser.username", addUser.username)
+			// console.log('data.password', data.user.password, "addUser.password", addUser.password)
+			
 			if (data.user.name === addUser.username
 				&& data.user.password === addUser.password
 			) {

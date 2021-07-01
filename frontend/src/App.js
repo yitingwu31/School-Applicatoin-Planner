@@ -30,7 +30,7 @@ const App = () => {
     <div className="App">
       {signedIn ? (
           <BrowserRouter>
-              <NavBar />
+              <NavBar user={user}/>
               <Switch>
               <Route exact path="/">
                 <Redirect to="/schools"/>
@@ -42,7 +42,7 @@ const App = () => {
                 <CalendarPage user={user}/>
               </Route>
               <Route exact path="/addSchool">
-                <AddSchool />
+                <AddSchool user={user}/>
               </Route>
               </Switch>
           </BrowserRouter>

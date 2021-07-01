@@ -79,7 +79,7 @@ const DialogActions = withStyles((theme) => ({
 
 /*********************************************************************** */
 
-export default function CustomizedAddSchool({ open, handleClose }) {
+export default function CustomizedAddSchool({ open, handleClose,user }) {
     const classes = useStyles();
     const School_todos = [
         "Program Research", "Register", "Application Form",
@@ -122,7 +122,7 @@ export default function CustomizedAddSchool({ open, handleClose }) {
     if (CheckpointError) console.log("CheckpointError", CheckpointError)
 
     const handleMutation = async (addSchool) => {
-        const owner = "emily"; //modify later
+        const owner = user; //modify later
         //await 
         await createSchool({
             variables: {

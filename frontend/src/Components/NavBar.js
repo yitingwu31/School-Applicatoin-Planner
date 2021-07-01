@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const NavBar = () => {
+const NavBar = ({user}) => {
     const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = useState(null)
@@ -89,6 +89,7 @@ const NavBar = () => {
                 <AddSchool
                     handleClose={handleAddClose}
                     open={addOpen}
+                    user={user}
                 />
                 <Button className={classes.toolbarMenu} aria-controls="view-menu" aria-haspopup="true" onClick={handleClick}>
                     VIEW
