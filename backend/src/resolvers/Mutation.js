@@ -37,13 +37,18 @@ const Mutation = {
         return newschool;
     },
 
-    async updateSchool(parent, { user, school, date }, { db }, info) {
+    async updateSchool(parent, { user, school, date }, { db, pubsub }, info) {
         const key = makeSchoolKey(user, school );
         try {
             let school = await db.SchoolModel.findOne({ key });
             school.deadline = date
-            await school.save()
-
+            await school.save();
+            pubsub.publish(`school ${user}`, {
+                school: {
+                    mutation: 'UPDATED',
+                    data: school
+                }
+            })
         } catch (e) {
             console.log(e);
             return false;
