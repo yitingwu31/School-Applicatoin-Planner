@@ -12,7 +12,7 @@ type Mutation {
 }
 
 type Query {
-    user(name: String!): User
+    user(name: String!,password:String!): User
     userSchool(user: String!): [School!]!
     userMonthTodo(user: String!, year: Int!, month: Int!): [Todo]!
     userMonthCheckpoint(user: String!, year: Int!, month: Int!): [Checkpoint]!

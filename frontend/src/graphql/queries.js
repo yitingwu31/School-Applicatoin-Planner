@@ -65,11 +65,12 @@ export const UPCOMING_QUERY = gql`
 
 export const USER_QUERY = gql`
     query user (
-        $user: String!
+        $user: String!,
+        $password:String!
     ) {
         user (
             user: $user
-            password: $ password
+            password: $password
         ) {
             id
             name
